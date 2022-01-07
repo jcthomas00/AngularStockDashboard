@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { StockService } from '../stock.service';
+import {FormGroup, FormControl} from '@angular/forms';
 
 @Component({
   selector: 'app-stocks',
@@ -18,10 +19,10 @@ export class StocksComponent implements OnInit {
       this.list=data; 
       console.log(data)
     })
-    this.stockService.getStockLiveData(['FACE', 'APPL', 'jhfcegrj']).subscribe((data:any) => {
-      //this.list=data; 
-      console.log(data)
-    })
+    // this.stockService.getStockLiveData(['FACE', 'APPL', 'jhfcegrj']).subscribe((data:any) => {
+    //   //this.list=data; 
+    //   console.log(data)
+    // })
   }
 
 }
