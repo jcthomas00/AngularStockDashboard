@@ -11,6 +11,12 @@ import {MatCommonModule} from '@angular/material/core';
 import { FavoritesComponent } from './favorites/favorites.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
+// Import firebase modules
+import { AngularFireModule } from "@angular/fire/compat";
+import { AngularFireAuthModule } from "@angular/fire/compat/auth";
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { environment } from '../environments/environment';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -24,7 +30,11 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     MatCommonModule,
     MatSliderModule,
     MatDatepickerModule,
-    DragDropModule
+    DragDropModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireModule,
+    AngularFirestoreModule,
+    AngularFireAuthModule 
   ],
   providers: [],
   bootstrap: [AppComponent]

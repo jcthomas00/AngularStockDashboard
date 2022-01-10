@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 @Component({
   selector: 'app-favorites',
@@ -13,7 +14,10 @@ export class FavoritesComponent {
     'Pick up groceries',
     'Go home'
   ];
-
+  constructor(private db: AngularFirestore) {
+    const things = db.collection('users').valueChanges();
+    things.subscribe(console.log);
+  }
   done = [
     'Get up',
     'Brush teeth',
