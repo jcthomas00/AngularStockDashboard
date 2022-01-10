@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-favorites',
@@ -14,7 +15,7 @@ export class FavoritesComponent {
     'Pick up groceries',
     'Go home'
   ];
-  constructor(private db: AngularFirestore) {
+  constructor(private db: AngularFirestore, private authService: AuthService) {
     const things = db.collection('users').valueChanges();
     things.subscribe(console.log);
   }
@@ -26,6 +27,12 @@ export class FavoritesComponent {
     'Walk dog'
   ];
 
+  login = () =>{
+    this.authService.login();
+  }
+  logout = () =>{
+    this.authService.logout();
+  }
   drop(event: CdkDragDrop<string[]>): void {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);

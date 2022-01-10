@@ -1,4 +1,4 @@
-<div class="container core-theme">
+<div class="container">
   <h2>To do</h2>
 
   <div cdkDropList #todoList="cdkDropList" [cdkDropListData]="todo"
@@ -15,3 +15,5 @@
     <div class="list-item" *ngFor="let item of done" cdkDrag>{{item}}</div>
   </div>
 </div>
+<button (click)="login()">Login</button>
+<button (click)="logout()">Logout</button>
