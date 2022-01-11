@@ -7,7 +7,8 @@ import { io } from 'socket.io-client';
 })
 export class StockService {
 
-  private url = "https://sheltered-bastion-43662.herokuapp.com/";
+  //private url = "https://sheltered-bastion-43662.herokuapp.com/";
+  private url = "http://localhost:8080";
   private socket:any = io(this.url);
 
   constructor() { }
@@ -24,9 +25,20 @@ export class StockService {
     })
   }
 
+  requestHistoricalData = () => {
+    this.socket.emit("historical", {
+      'request-type': "historical",
+      symbols: ['AAPL','DS'],
+      timeframe: 5,
+      start: '01-13-2020',
+    });
+  }
+
+
   getStockHistoricalData = ():Observable<any> => {
     return new Observable((observer:any) => {
-      this.socket.on('list', (data:any) => {
+      this.socket.on('historical', (data:any) => {
+        console.log(data)
         observer.next(data);
       })
     })

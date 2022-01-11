@@ -5,11 +5,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { StocksComponent } from './stocks/stocks.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatSliderModule } from '@angular/material/slider'
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatCommonModule} from '@angular/material/core';
-import { FavoritesComponent } from './favorites/favorites.component';
-import { DragDropModule } from '@angular/cdk/drag-drop';
 
 // Import firebase modules
 import { AngularFireModule } from "@angular/fire/compat";
@@ -17,11 +12,35 @@ import { AngularFireAuthModule } from "@angular/fire/compat/auth";
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { environment } from '../environments/environment';
 
+// Custom components
+import { HeaderComponent } from './header/header.component';
+import { FooterComponent } from './footer/footer.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { AboutComponent } from './about/about.component';
+import { ChartComponent } from './chart/chart.component';
+import { FavoritesComponent } from './favorites/favorites.component';
+
+// Angular Material modules
+import { MatSliderModule } from '@angular/material/slider'
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatCommonModule} from '@angular/material/core';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+
+// Plotly imports
+import * as PlotlyJS from 'plotly.js-dist';
+import { PlotlyModule } from 'angular-plotly.js';
+PlotlyModule.plotlyjs = PlotlyJS;
+
 @NgModule({
   declarations: [
     AppComponent,
     StocksComponent,
-    FavoritesComponent
+    FavoritesComponent,
+    HeaderComponent,
+    FooterComponent,
+    DashboardComponent,
+    AboutComponent,
+    ChartComponent
   ],
   imports: [
     BrowserModule,
@@ -34,7 +53,8 @@ import { environment } from '../environments/environment';
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireModule,
     AngularFirestoreModule,
-    AngularFireAuthModule 
+    AngularFireAuthModule,
+    PlotlyModule
   ],
   providers: [],
   bootstrap: [AppComponent]

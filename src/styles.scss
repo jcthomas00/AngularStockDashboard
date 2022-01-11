@@ -31,4 +31,9 @@ $dark-theme: mat.define-dark-theme((
 .my-light-theme {
  @include mat.core-color($light-theme);
  @include mat.button-color($light-theme);
-}
+}@import '~@fortawesome/fontawesome-free/scss/fontawesome.scss';
+@import '~@fortawesome/fontawesome-free/scss/solid.scss';
+@import '~@fortawesome/fontawesome-free/scss/regular.scss';
+@import '~@fortawesome/fontawesome-free/scss/brands.scss';
+ 
+@import '~mdb-angular-ui-kit/assets/scss/mdb.scss';
