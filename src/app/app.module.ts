@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule} from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -29,6 +30,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 // Plotly imports
 import * as PlotlyJS from 'plotly.js-dist';
 import { PlotlyModule } from 'angular-plotly.js';
+import { NewsComponent } from './news/news.component';
+import { CompanyInfoComponent } from './company-info/company-info.component';
 PlotlyModule.plotlyjs = PlotlyJS;
 
 @NgModule({
@@ -40,11 +43,14 @@ PlotlyModule.plotlyjs = PlotlyJS;
     FooterComponent,
     DashboardComponent,
     AboutComponent,
-    ChartComponent
+    ChartComponent,
+    NewsComponent,
+    CompanyInfoComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     MatCommonModule,
     MatSliderModule,
