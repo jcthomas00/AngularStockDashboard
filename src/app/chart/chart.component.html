@@ -1,11 +1,12 @@
-<plotly-plot
-       [data]="graph1.data"
-       [layout]="graph1.layout"
-       [useResizeHandler]="true"
-       (hover)="hover($event)"
-       (plotlyClick)="hover($event)"
-       (mouseleave)="mouseLeave($event)"></plotly-plot>
-
+<div *ngIf="stockInfo$ | async as stockInfo">
+    <plotly-plot
+        [data]="[stockInfo]"
+        [layout]="graph1.layout"
+        [useResizeHandler]="true"
+        (hover)="hover($event)"
+        (plotlyClick)="hover($event)"
+        (mouseleave)="mouseLeave($event)"></plotly-plot>
+</div>
     <plotly-plot
        [data]="(interactivePlotSubject$ | async)"
        [layout]="graph2.layout"

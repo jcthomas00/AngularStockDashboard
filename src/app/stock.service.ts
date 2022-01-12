@@ -28,7 +28,7 @@ export class StockService {
   requestHistoricalData = () => {
     this.socket.emit("historical", {
       'request-type': "historical",
-      symbols: ['AAPL','DS'],
+      symbols: ['AAPL'],
       timeframe: 5,
       start: '01-13-2020',
     });
@@ -38,7 +38,6 @@ export class StockService {
   getStockHistoricalData = ():Observable<any> => {
     return new Observable((observer:any) => {
       this.socket.on('historical', (data:any) => {
-        console.log(data)
         observer.next(data);
       })
     })
@@ -48,6 +47,7 @@ export class StockService {
     this.socket.emit('live', {symbols:symbols});
     return new Observable((observer:any) => {
       this.socket.on('live', (data:any) => {
+        console.log(data)
         observer.next(data);
       })
     })

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Subject, BehaviorSubject, Observable, of } from 'rxjs';
 import { StockService } from '../stock.service';
+import { map, max } from 'rxjs/operators';
 
 @Component({
   selector: 'app-chart',
@@ -13,18 +14,43 @@ export class ChartComponent implements OnInit {
     this.stockService.requestHistoricalData();
   }
   stockInfo$:Observable<any> = of(null);
+  x:string = ''; close:number[] = []; high:string[] = []; low:string[] = []; open:string[] = [];
 
   ngOnInit(): void {
-    // this.stockInfo$ = this.stockService.getStockHistoricalData().pipe(
-    //   map((data)=>{return{
-
+    // this.stockInfo$ = this.stockService.getStockLiveData(["AAPL"]).pipe(
+    //   map((response)=>{
+    //     return{
+    //       x: [response["new-value"].data[0]["timestamp"]],
+    //       close: [response["new-value"].data[0]["close"]],
+    //       high:  [response["new-value"].data[0]["high"]],
+    //       low: [response["new-value"].data[0]["low"]],
+    //       open: [response["new-value"].data[0]["open"]].slice(),
+    //       decreasing: {line: {color: '#7F7F7F'}}, 
+    //       increasing: {line: {color: '#17BECF'}}, 
+    //       line: {color: 'rgba(31,119,180,1)'}, 
+    //       type: 'candlestick', 
+    //       xaxis: 'x', 
+    //       yaxis: 'y' 
     //   }})
-    // )
-    this.stockService.getStockHistoricalData().subscribe((data)=>{
-      console.log(data);
-      this.setChartData(data);
-    })
-  }
+    // );
+
+    this.stockInfo$ = this.stockService.getStockHistoricalData().pipe(
+        map((response)=>{
+          return{
+            x:      this.unpackArray(response.data[0].data, "timestamp"),
+            close:  this.unpackArray(response.data[0].data, "close"),
+            high:   this.unpackArray(response.data[0].data, "high"),
+            low:    this.unpackArray(response.data[0].data, "low"),
+            open:   this.unpackArray(response.data[0].data, "open").slice(),
+            decreasing: {line: {color: '#7F7F7F'}}, 
+            increasing: {line: {color: '#17BECF'}}, 
+            line: {color: 'rgba(31,119,180,1)'}, 
+            type: 'candlestick', 
+            xaxis: 'x', 
+            yaxis: 'y' 
+        }}))
+
+      }
   title = 'dynamic-plots';
   // Bar Chart
   graph1 = {
@@ -35,62 +61,79 @@ export class ChartComponent implements OnInit {
         high: [''],
         low: [''],
         open: ['']
-        // decreasing: {line: {color: '#7F7F7F'}}, 
-        // increasing: {line: {color: '#17BECF'}}, 
-        // line: {color: 'rgba(31,119,180,1)'}, 
-        // type: 'candlestick', 
-        // xaxis: 'x', 
-        // yaxis: 'y' 
     },
     ],
-    layout: {}
+    layout: {
+      title: 'Some Data to Hover Over',
+      margin: 0,
+      yaxis: {
+        autorange: true, 
+        fixedrange: false
+      },
+      xaxis: {
+        autorange: true, 
+        domain: [0, 1], 
+        color: 'pink',
+        title: 'Dates',
+        rangebreaks: [
+          {
+            bounds: [17, 9], 
+            pattern: "hour"
+          }
+        ]
+      }}
   };
   unpackArray(array:any[], key:string) {
     return array.map(array => array[key]);
   }
-  setChartData = (data:any) => {
-    //console.log(this.unpackArray(data.data[0].data, "timestamp"))
-    const newData = {
-      x: this.unpackArray(data.data[0].data, "timestamp"),
-      close: this.unpackArray(data.data[0].data, "close"),
-      high: this.unpackArray(data.data[0].data, "high"),
-      low: this.unpackArray(data.data[0].data, "low"),
-      open: this.unpackArray(data.data[0].data, "open"),
-      decreasing: {line: {color: '#7F7F7F'}}, 
-      increasing: {line: {color: '#17BECF'}}, 
-      line: {color: 'rgba(31,119,180,1)'}, 
-      type: 'candlestick', 
-      xaxis: 'x', 
-      yaxis: 'y' 
-    }
-    this.graph1.data[0]= newData;
-    this.graph1.layout = {
-      title: 'Some Data to Hover Over',
-      xaxis: {
-        title: 'Date',
-        autorange: true
-      }}
-      setTimeout(()=>{
-        const newerData = {
-          x: this.unpackArray(data.data[1].data, "timestamp").map((time)=>new Date(time).toLocaleDateString()),
-          close: this.unpackArray(data.data[1].data, "close"),
-          high: this.unpackArray(data.data[1].data, "high"),
-          low: this.unpackArray(data.data[1].data, "low"),
-          open: this.unpackArray(data.data[1].data, "open"), 
-          type: 'candlestick', 
-          xaxis: 'x', 
-          yaxis: 'y' 
-        }
-        this.graph1.data[0]= newerData
-      //   newData.x.push('1/12/2022');
-      //   newData.high.push('22');
-      //   newData.low.push('12');
-      //   newData.close.push('22');
-      //   newData.open.push('12');
-      //   this.graph1.data[0]= newData;
-      //   console.log("yolo")
-      },5000);
-  }
+
+  // setChartData = (data:any) => {
+  //   //console.log(this.unpackArray(data.data[0].data, "timestamp"))
+  //   const newData = {
+  //     x: this.unpackArray(data.data[0].data, "timestamp"),
+  //     close: this.unpackArray(data.data[0].data, "close"),
+  //     high: this.unpackArray(data.data[0].data, "high"),
+  //     low: this.unpackArray(data.data[0].data, "low"),
+  //     open: this.unpackArray(data.data[0].data, "open"),
+  //     decreasing: {line: {color: '#7F7F7F'}}, 
+  //     increasing: {line: {color: '#17BECF'}}, 
+  //     line: {color: 'rgba(31,119,180,1)'}, 
+  //     type: 'candlestick', 
+  //     xaxis: 'x', 
+  //     yaxis: 'y' 
+  //   }
+  //   this.graph1.data[0]= newData;
+
+  //   this.graph1.layout = {
+  //     title: 'Some Data to Hover Over',
+  //     xaxis: {
+  //       color: '#123123',
+  //       title: 'Dates',
+  //       rangebreaks: [{
+  //         bounds: ["sat", "sun"]
+  //       }]
+  //     }}
+  //     setTimeout(()=>{
+  //       const newerData = {
+  //         x: this.unpackArray(data.data[1].data, "timestamp").map((time)=>new Date(time).toLocaleDateString()),
+  //         close: this.unpackArray(data.data[1].data, "close"),
+  //         high: this.unpackArray(data.data[1].data, "high"),
+  //         low: this.unpackArray(data.data[1].data, "low"),
+  //         open: this.unpackArray(data.data[1].data, "open"), 
+  //         type: 'candlestick', 
+  //         xaxis: 'x', 
+  //         yaxis: 'y' 
+  //       }
+  //       this.graph1.data[0]= newerData
+  //     //   newData.x.push('1/12/2022');
+  //     //   newData.high.push('22');
+  //     //   newData.low.push('12');
+  //     //   newData.close.push('22');
+  //     //   newData.open.push('12');
+  //     //   this.graph1.data[0]= newData;
+  //     //   console.log("yolo")
+  //     },5000);
+  // }
 
   // Line chart
   graph2 = {
