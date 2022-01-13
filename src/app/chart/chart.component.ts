@@ -17,9 +17,6 @@ export class ChartComponent implements OnInit {
   
   stocks:Stocks = <Stocks>{};
   dynamicStocks$ :Observable<any> = of(null);
-  stockInfo$:Observable<any> = of(null);
-  histStockInfo$:Observable<any> = of(null);
-  x:string = ''; close:number[] = []; high:string[] = []; low:string[] = []; open:string[] = [];
 
   ngOnInit(): void {
     this.stockService.getStockHistoricalData().subscribe((response)=>{
@@ -189,6 +186,9 @@ export class ChartComponent implements OnInit {
         color: 'pink',
         title: 'Dates',
         rangebreaks: [
+          {
+            bounds:["sat", "mon"]
+          },
           {
             bounds: [17, 9], 
             pattern: "hour"

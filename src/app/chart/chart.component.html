@@ -9,7 +9,3 @@
         (plotlyClick)="hover($event)"
         (mouseleave)="mouseLeave($event)"></plotly-plot>
 </div>
-    <plotly-plot
-       [data]="(interactivePlotSubject$ | async)"
-       [layout]="graph2.layout"
-       [useResizeHandler]="true"></plotly-plot>
