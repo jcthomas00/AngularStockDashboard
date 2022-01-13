@@ -9,6 +9,8 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 export class DashboardComponent implements OnInit {
 
   constructor() { }
+  leftBar = [0,1,2];
+  rightBar = [2,3,4,5,1];
   left = [
     {icon: "fas fa-pencil-alt text-info fa-3x", number: 278, text: "New Posts"},
     {icon: "fas fa-rocket text-danger fa-3x", number: 278, text: "New Projects"},
@@ -29,8 +31,8 @@ export class DashboardComponent implements OnInit {
           event.previousIndex,
           event.currentIndex);
     }
-    console.log(this.left)
-    console.log(this.right)
+    console.log(this.leftBar)
+    console.log(this.rightBar)
   }
   ngOnInit(): void {
   }

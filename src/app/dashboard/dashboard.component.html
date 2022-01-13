@@ -1,33 +1,12 @@
 <div class="container">
 <section>
     <div class="row">
-      <div cdkDropList #leftList="cdkDropList"  [cdkDropListData]="left" [cdkDropListConnectedTo]="rightList"
+      <div cdkDropList #leftSide="cdkDropList"  [cdkDropListData]="leftBar" [cdkDropListConnectedTo]="rightSide"
            (cdkDropListDropped)="drop($event)" class="col-lg-3 col-md-12 mb-4 order-2 order-lg-1 order-xl-1">
-        <div *ngFor="let item of left" class="card" cdkDrag>
-          <div class="card-body">
-            <div class="d-flex justify-content-between px-md-1">
-              <div>
-                <h3 class="text-success">{{item.number}}</h3>
-                <p class="mb-0">{{item.text}}</p>
-              </div>
-              <div class="align-self-center">
-                <i class="{{item.icon}}"></i>
-              </div>
-            </div>
-            <div class="px-md-1" *ngIf="item.hasOwnProperty('progress')">
-              <div class="progress mt-3 mb-1 rounded" style="height: 7px">
-                <div
-                     class="progress-bar bg-success"
-                     role="progressbar"
-                     style="width: 60%"
-                     aria-valuenow="60"
-                     aria-valuemin="0"
-                     aria-valuemax="100"
-                     ></div>
-              </div>
-            </div>
-          </div>
-        </div>
+           <div *ngFor="let item of leftBar" class="card" cdkDrag>
+            <app-news *ngIf="item===1"></app-news>
+            <app-company-info *ngIf="item===2"></app-company-info>
+             </div>
       </div>
       <div class="col-lg-6 col-md-12 mb-4 order-1 order-lg-2 order-xl-2">
         <div class="card">
@@ -58,36 +37,16 @@
             </div>
           </div>
       </div>
-      <div cdkDropList #rightList="cdkDropList"   [cdkDropListData]="right" [cdkDropListConnectedTo]="leftList"
+
+      <div cdkDropList #rightSide="cdkDropList"  [cdkDropListData]="rightBar" [cdkDropListConnectedTo]="leftSide"
            (cdkDropListDropped)="drop($event)" class="col-lg-3 col-md-12 mb-4 order-3">
-        <div *ngFor="let item of right" class="card" cdkDrag>
-          <div class="card-body">
-            <div class="d-flex justify-content-between px-md-1">
-              <div>
-                <h3 class="text-success">{{item.number}}</h3>
-                <p class="mb-0">{{item.text}}</p>
-              </div>
-              <div class="align-self-center">
-                <i class="{{item.icon}}"></i>
-              </div>
-            </div>
-            <div class="px-md-1" *ngIf="item.hasOwnProperty('progress')">
-              <div class="progress mt-3 mb-1 rounded" style="height: 7px">
-                <div
-                     class="{{item.progress?.class}}"
-                     role="progressbar"
-                     style="width: {{item.progress?.width}}%"
-                     aria-valuenow="60"
-                     aria-valuemin="0"
-                     aria-valuemax="100"
-                     ></div>
-              </div>
-            </div>
-          </div>
-        </div>
+           <div *ngFor="let item of rightBar" class="card" cdkDrag>
+            <app-news *ngIf="item===1"></app-news>
+            <app-company-info *ngIf="item===2"></app-company-info>
+             </div>
       </div>
+
+
     </div>
   </section>
-  <app-news></app-news>
-  <app-company-info></app-company-info>
 </div>

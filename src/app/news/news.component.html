@@ -1,1 +1,21 @@
-<p>news works!</p>
+<div class="card">
+    <div class="card-header">News</div>
+    <div class="card-body">
+      <ul>
+          <li *ngFor="let news of newsList$ | async">
+              {{news.article_url}}
+              {{news.title}}
+              {{news.image_url}}
+          </li>
+      </ul>
+      <div class="d-flex justify-content-between px-md-1">
+        <div class="align-self-center">
+          <i class="far fa-comment-alt text-warning fa-3x"></i>
+        </div>
+        <div class="text-end">
+          <h3>156</h3>
+          <p class="mb-0">New Comments</p>
+        </div>
+      </div>
+    </div>
+  </div>
