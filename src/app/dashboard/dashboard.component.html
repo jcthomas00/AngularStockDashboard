@@ -3,6 +3,8 @@
     <div class="row">
       <div cdkDropList #leftList="cdkDropList"  [cdkDropListData]="left" [cdkDropListConnectedTo]="rightList"
            (cdkDropListDropped)="drop($event)" class="col-lg-3 col-md-12 mb-4 order-2 order-lg-1 order-xl-1">
+
+  <app-news></app-news>
         <div *ngFor="let item of left" class="card" cdkDrag>
           <div class="card-body">
             <div class="d-flex justify-content-between px-md-1">
@@ -60,6 +62,8 @@
       </div>
       <div cdkDropList #rightList="cdkDropList"   [cdkDropListData]="right" [cdkDropListConnectedTo]="leftList"
            (cdkDropListDropped)="drop($event)" class="col-lg-3 col-md-12 mb-4 order-3">
+
+  <app-company-info></app-company-info>
         <div *ngFor="let item of right" class="card" cdkDrag>
           <div class="card-body">
             <div class="d-flex justify-content-between px-md-1">
@@ -88,6 +92,4 @@
       </div>
     </div>
   </section>
-  <app-news></app-news>
-  <app-company-info></app-company-info>
 </div>

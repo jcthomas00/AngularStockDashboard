@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable, of } from 'rxjs';
 import { NewsService } from '../news.service';
 
 @Component({
@@ -10,10 +11,10 @@ export class NewsComponent implements OnInit {
 
   constructor(private newsService:NewsService) { }
 
+  newsList$:Observable<any> = of(null);
+
   ngOnInit(): void {
-    this.newsService.getGeneralNews().subscribe((data) => {
-      console.log('news data', data)
-    })
+    //this.newsList$ = this.newsService.getGeneralNews();
   }
 
 }

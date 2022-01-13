@@ -8,12 +8,14 @@ import { CompanyinfoService } from '../companyinfo.service';
 })
 export class CompanyInfoComponent implements OnInit {
 
+  info:any = {}
   constructor(private companyInfoService:CompanyinfoService) { }
 
   ngOnInit(): void {
-    this.companyInfoService.getCompanyInfo('AAPL').subscribe((data) => {
-      console.log('company info', data)
-    })
+    // this.companyInfoService.getCompanyInfo('AAPL').subscribe((data) => {
+    //   this.info = data;
+    //   console.log('company info', data)
+    // })
   }
 
 }

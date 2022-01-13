@@ -30,7 +30,7 @@ export class StockService {
       'request-type': "historical",
       symbols: ['AAPL'],
       timeframe: 5,
-      start: '01-13-2020',
+      start: '01-11-2021',
     });
   }
 
