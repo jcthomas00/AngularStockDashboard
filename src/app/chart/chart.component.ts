@@ -12,7 +12,7 @@ import { Stocks } from 'src/Interfaces';
 export class ChartComponent implements OnInit {
 
   constructor(private stockService:StockService) {
-    this.stockService.requestHistoricalData();
+    this.stockService.requestHistoricalData(['TSLA'], 15, "2021-01-11");
   }
   
   stocks:Stocks = <Stocks>{};
@@ -35,7 +35,7 @@ export class ChartComponent implements OnInit {
     }
     })
 
-    this.dynamicStocks$ =  this.stockService.getStockLiveData(["AAPL"]).pipe(
+    this.dynamicStocks$ =  this.stockService.getStockLiveData(["TSLA"]).pipe(
       tap((response)=>{
         const newVals = response["new-value"].data[0], historical = this.stocks, lastIndex = historical.x.length-1;
 
@@ -187,12 +187,17 @@ export class ChartComponent implements OnInit {
         title: 'Dates',
         rangebreaks: [
           {
-            bounds:["sat", "mon"]
+            bounds: ["sat", "mon"] 
           },
           {
-            bounds: [17, 9], 
+            bounds: [16, 9.5], 
             pattern: "hour"
           }
+
+          // ,
+          // {
+          //   values: ["2021-01-01", "2021-01-18", "2021-02-15", "2021-04-02", "2021-05-31", "2021-07-05", "2021-09-06", "2021-11-25", "2021-12-25"]
+          // }
         ]
       }}
   };
