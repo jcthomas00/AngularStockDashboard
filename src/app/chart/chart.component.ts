@@ -3,6 +3,7 @@ import { Subject, BehaviorSubject, Observable, of } from 'rxjs';
 import { StockService } from '../stock.service';
 import { map, max, mergeMap, tap } from 'rxjs/operators';
 import { Stocks } from 'src/Interfaces';
+import { DataService } from '../data.service';
 
 @Component({
   selector: 'app-chart',
@@ -11,8 +12,11 @@ import { Stocks } from 'src/Interfaces';
 })
 export class ChartComponent implements OnInit {
 
-  constructor(private stockService:StockService) {
-    this.stockService.requestHistoricalData(['TSLA'], 15, "2021-01-11");
+  constructor(
+    private stockService:StockService,
+    private dataService:DataService
+    ) {
+    this.stockService.requestHistoricalData([this.dataService.symbol.value], this.dataService.timeframe.value, this.dataService.date.value);
   }
   
   stocks:Stocks = <Stocks>{};
@@ -20,6 +24,7 @@ export class ChartComponent implements OnInit {
 
   ngOnInit(): void {
     this.stockService.getStockHistoricalData().subscribe((response)=>{
+      this.stocks = <Stocks>{};
       this.stocks = {
         x:      this.unpackArray(response.data[0].data, "timestamp"),
         close:  this.unpackArray(response.data[0].data, "close"),
@@ -35,8 +40,9 @@ export class ChartComponent implements OnInit {
     }
     })
 
-    this.dynamicStocks$ =  this.stockService.getStockLiveData(["TSLA"]).pipe(
+    this.dynamicStocks$ =  this.stockService.getStockLiveData([this.dataService.symbol.value]).pipe(
       tap((response)=>{
+        console.log([this.dataService.symbol.value])
         const newVals = response["new-value"].data[0], historical = this.stocks, lastIndex = historical.x.length-1;
 
         historical.x[lastIndex]=newVals["timestamp"];

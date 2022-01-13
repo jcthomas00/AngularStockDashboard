@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule} from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -26,12 +27,17 @@ import { MatSliderModule } from '@angular/material/slider'
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatCommonModule} from '@angular/material/core';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input'
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 // Plotly imports
 import * as PlotlyJS from 'plotly.js-dist';
 import { PlotlyModule } from 'angular-plotly.js';
 import { NewsComponent } from './news/news.component';
 import { CompanyInfoComponent } from './company-info/company-info.component';
+import { SearchFilterPipe } from './search-filter.pipe';
 PlotlyModule.plotlyjs = PlotlyJS;
 
 @NgModule({
@@ -45,16 +51,22 @@ PlotlyModule.plotlyjs = PlotlyJS;
     AboutComponent,
     ChartComponent,
     NewsComponent,
-    CompanyInfoComponent
+    CompanyInfoComponent,
+    SearchFilterPipe
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    FormsModule,
     BrowserAnimationsModule,
     MatCommonModule,
     MatSliderModule,
     MatDatepickerModule,
+    MatNativeDateModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonToggleModule,
     DragDropModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireModule,
