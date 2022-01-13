@@ -7,7 +7,7 @@ import { io } from 'socket.io-client';
 })
 export class StockService {
 
-  //private url = "https://sheltered-bastion-43662.herokuapp.com/";
+  //private url = "https://nabors-stock-server.herokuapp.com/"
   private url = "http://localhost:8080";
   private socket:any = io(this.url);
 
@@ -25,12 +25,12 @@ export class StockService {
     })
   }
 
-  requestHistoricalData = () => {
+  requestHistoricalData = (syms:string[], tf:number, startDate:string) => {
     this.socket.emit("historical", {
       'request-type': "historical",
-      symbols: ['AAPL'],
-      timeframe: 5,
-      start: '01-11-2021',
+      symbols: syms,
+      timeframe: tf,
+      start: startDate,
     });
   }
 
