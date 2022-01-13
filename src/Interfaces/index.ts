@@ -11,3 +11,9 @@ export interface Stocks {
     xaxis: string, 
     yaxis: string 
 }; 
+
+export interface UserData {
+    favorites: string[],
+    leftBar: number[],
+    rightBar: number[]
+}
