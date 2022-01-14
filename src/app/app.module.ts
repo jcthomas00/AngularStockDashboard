@@ -38,6 +38,9 @@ import { PlotlyModule } from 'angular-plotly.js';
 import { NewsComponent } from './news/news.component';
 import { CompanyInfoComponent } from './company-info/company-info.component';
 import { SearchFilterPipe } from './search-filter.pipe';
+import { ComparisonChartComponent } from './comparison-chart/comparison-chart.component';
+import { CurrentInfoComponent } from './current-info/current-info.component';
+import { IndexChartComponent } from './index-chart/index-chart.component';
 PlotlyModule.plotlyjs = PlotlyJS;
 
 @NgModule({
@@ -52,7 +55,10 @@ PlotlyModule.plotlyjs = PlotlyJS;
     ChartComponent,
     NewsComponent,
     CompanyInfoComponent,
-    SearchFilterPipe
+    SearchFilterPipe,
+    ComparisonChartComponent,
+    CurrentInfoComponent,
+    IndexChartComponent
   ],
   imports: [
     BrowserModule,
