@@ -33,7 +33,7 @@ import { MatInputModule } from '@angular/material/input'
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 // Plotly imports
-import * as PlotlyJS from 'plotly.js-dist';
+import * as PlotlyJS from 'plotly.js-dist-min';
 import { PlotlyModule } from 'angular-plotly.js';
 import { NewsComponent } from './news/news.component';
 import { CompanyInfoComponent } from './company-info/company-info.component';

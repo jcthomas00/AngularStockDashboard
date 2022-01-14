@@ -1,0 +1,14 @@
+Hi there!
+
+1. Visually display the live data changes instead of having it with the candlestick chart
+
+2. Put the links in an actual link tag. I'm trying to copy the text and it's not letting me
+
+2.a The drag and drop columns are pretty dope, though!
+
+3. It isn't displaying different historical data if you select a different ticker/stock
+
+4. Make sure to also make it so that a user can select a range of dates to view. 
+Having the entire year display makes it difficult to view, and using plotly's zoom function is absolute garbanzo beans
+
+5. YO HOW DID YOU GET PIPE TAP WORKING???
