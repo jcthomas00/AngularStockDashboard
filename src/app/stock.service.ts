@@ -9,8 +9,6 @@ export class StockService {
 
   //private url = "https://nabors-stock-server.herokuapp.com/"
   private url = "http://localhost:8080";
-  //private url = "https://sheltered-bastion-43662.herokuapp.com/";
-
   private socket:any = io(this.url);
 
   constructor() { }
@@ -27,14 +25,33 @@ export class StockService {
     })
   }
 
-  requestHistoricalData = (syms:string[], tf:number, startDate:string) => {
-    this.socket.emit("historical", {
-      'request-type': "historical",
-      symbols: syms,
-      timeframe: tf,
-      start: startDate,
-    });
+  requestHistoricalData = async (syms:string[], tf:number, startDate:string) => {
+    return await this.asyncEmit('historical', {
+    'request-type': "historical",
+    symbols: syms,
+    timeframe: tf,
+    start: startDate,
+    })
   }
+
+  //getStockHistoricalData 
+  public asyncEmit = (eventName: string, data?: any): Promise<any> => {
+    return new Promise((resolve, reject) => {
+      if(data !== undefined) this.socket.emit(eventName, data)
+      else this.socket.emit(eventName)
+      this.socket.on(eventName, (result: any) => {
+        this.socket.off(eventName)
+        resolve(result)
+      })
+      /* If no response after 1 second */
+      setTimeout(() => { reject(new Error('Server responded too slow... it might be down or lagging behind')) }, 5000)
+    })
+  }
+
+  // public requestHistorical = async (tickers:string[]): Promise<HistoricalStockObject[]> => {
+  //   const data = await this.asyncEmit('historical', tickers)
+  //   return data.data
+  // }
 
 
   getStockHistoricalData = ():Observable<any> => {
