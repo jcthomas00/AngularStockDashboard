@@ -7,8 +7,8 @@ import { io } from 'socket.io-client';
 })
 export class StockService {
 
-  //private url = "https://nabors-stock-server.herokuapp.com/"
-  private url = "http://localhost:8080";
+  private url = "https://nabors-stock-server.herokuapp.com/"
+  //private url = "http://localhost:8080";
   private socket:any = io(this.url);
 
   constructor() { }
