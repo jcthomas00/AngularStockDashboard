@@ -2,6 +2,8 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { DataService } from '../data.service';
 import { StockService } from '../stock.service';
+import { UserService } from '../user.service';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,12 +21,14 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private dataService:DataService,
-    private stockService:StockService
+    private stockService:StockService,
+    private userService:UserService,
+    private authService:AuthService
     ) { }
 
   leftBar = [0,1,2];
   rightBar = [2,3];
-  curLocation:string = '';
+  favorites:string[] = [];
 
   drop(event: CdkDragDrop<any[]>): void {
     if (event.previousContainer === event.container) {
@@ -35,11 +39,28 @@ export class DashboardComponent implements OnInit {
           event.previousIndex,
           event.currentIndex);
     }
+    this.userService.setUserData({leftBar: this.leftBar, rightBar: this.rightBar, favorites: ['AAPL']})
     console.log(this.leftBar)
     console.log(this.rightBar)
+
   }
   ngOnInit(): void {
-    this.curLocation = 'houston, TX';
+    this.authService.getUser().subscribe(user => {
+      if(user){
+        this.userService.getUserData(user.uid).subscribe(userInfo=>{
+          this.leftBar = userInfo.leftBar; 
+          this.rightBar = userInfo.rightBar;
+          this.favorites =  userInfo.favorites
+          console.log("lefty: ",this.leftBar)
+        })
+      }
+    });
+    // this.authService.getUser().subscribe(user => {
+    //   console.log(user)
+    //   if(user){
+    //     return this.db.collection('users').doc(user.uid).set(data); 
+    //   }else return null;
+    // })
   }
 
   onSelectStock(newSymbol:string) {
@@ -68,5 +89,15 @@ export class DashboardComponent implements OnInit {
       this.stockService.requestHistoricalData([this.dataService.symbol.value], this.dataService.timeframe.value, this.dataService.date.value)
       console.log('onTimeframeChange', this.dataService.symbol.value, this.dataService.timeframe.value, this.dataService.date.value)
     }
+  }
+
+  onLogin() {
+    // this.userService.getUserData().subscribe(userInfo => {
+    //   console.log(userInfo)
+    //   // this.leftBar = userInfo.leftBar; 
+    //   // this.rightBar = userInfo.rightBar;
+    //   // this.favorites =  userInfo.favorites
+    // });
+    
   }
 }

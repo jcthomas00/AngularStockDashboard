@@ -2,14 +2,11 @@
     <div class="card-header">Information</div>
     <div class="card-body">
       <ul>
-          <li *ngIf="info">
-              {{info.name}}
-              {{info.address}}
-              {{info.homepage_url}}
-              {{info.phone_number}}
-              {{info.description}}
-              {{info.market_cap}}
-              {{info.list_date}}
+          <li *ngIf="info.quoteSummary">
+              {{info.quoteSummary.result[0].quoteType.longName}}
+              {{info.quoteSummary.result[0].assetProfile.website}}
+              {{info.quoteSummary.result[0].assetProfile.phone}}
+              {{info.quoteSummary.result[0].assetProfile.longBusinessSummary}}
           </li>
       </ul>
     </div>

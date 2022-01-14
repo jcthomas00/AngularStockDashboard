@@ -7,8 +7,10 @@ import { io } from 'socket.io-client';
 })
 export class StockService {
 
-  private url = "https://nabors-stock-server.herokuapp.com/"
-  //private url = "http://localhost:8080";
+  //private url = "https://nabors-stock-server.herokuapp.com/"
+  private url = "http://localhost:8080";
+  //private url = "https://sheltered-bastion-43662.herokuapp.com/";
+
   private socket:any = io(this.url);
 
   constructor() { }
@@ -47,7 +49,7 @@ export class StockService {
     this.socket.emit('live', {symbols:symbols});
     return new Observable((observer:any) => {
       this.socket.on('live', (data:any) => {
-        console.log(data)
+      //  console.log(data)
         observer.next(data);
       })
     })

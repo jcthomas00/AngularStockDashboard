@@ -42,7 +42,7 @@ export class ChartComponent implements OnInit {
 
     this.dynamicStocks$ =  this.stockService.getStockLiveData([this.dataService.symbol.value]).pipe(
       tap((response)=>{
-        console.log([this.dataService.symbol.value])
+        //console.log([this.dataService.symbol.value])
         const newVals = response["new-value"].data[0], historical = this.stocks, lastIndex = historical.x.length-1;
 
         historical.x[lastIndex]=newVals["timestamp"];
@@ -69,7 +69,7 @@ export class ChartComponent implements OnInit {
     )
 
     this.dynamicStocks$.subscribe(res=>{
-      console.log("smell",res)
+//      console.log("smell",res)
     // .subscribe((response) => {
     //   const vals = response["new-value"].data[0];
     //   const lastIndex = this.stocks.x.length-1;

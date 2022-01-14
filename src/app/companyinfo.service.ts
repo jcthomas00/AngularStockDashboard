@@ -20,12 +20,13 @@ export class CompanyinfoService {
   public getCompanyInfo(symbol:string):Observable<any> {
     return new Observable<any[]>((observer:any) => {
       //this.httpClient.get<Object>(`${this.url}${symbol}?apiKey=${this.apiKey}`)
-      this.httpClient.post<Object>(this.url,{link: `${this.yurl}${symbol}?modules=assetProfile`})
+      //this.httpClient.post(this.url,{link: `${this.yurl}${symbol}?modules=assetProfile`})
+      this.httpClient.post(this.url,{link: `${this.yurl}${symbol}?modules=assetProfile,quoteType`})
       .subscribe(
         (response:any) => {
-          this.address.next(`${response.results.address.address1}, ${response.results.address.city}, ${response.results.address.postal_code}`);
-          console.log("yoy: ", response)
-          observer.next(response.results);
+          const address = `${response.quoteSummary.result[0].assetProfile.address1} ${response.quoteSummary.result[0].assetProfile.city} ${response.quoteSummary.result[0].assetProfile.zip}`;
+          this.address.next(address);
+          observer.next(response);
         })
     })
   }

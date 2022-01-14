@@ -13,6 +13,7 @@ export class CompanyInfoComponent implements OnInit {
   constructor(private companyInfoService:CompanyinfoService, private dataService:DataService) { }
 
   ngOnInit(): void {
+    
     this.dataService.symbol.subscribe(symbol => {
       if(symbol !== ''){
         this.companyInfoService.getCompanyInfo(symbol).subscribe((info) => {

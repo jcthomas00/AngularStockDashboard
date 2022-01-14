@@ -23,7 +23,6 @@ export class MapComponent implements OnInit {
   ngOnInit(): void {
 
     this.companyInfoService.address.subscribe(address => {
-      console.log("gogo: ", address)
       this.staticMapLink= this.sanitizer.bypassSecurityTrustResourceUrl(
         `https://maps.googleapis.com/maps/api/staticmap?center=${address}&zoom=13&size=500x500&maptype=roadmap&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&markers=color:green%7Clabel:G%7C40.711614,-74.012318&markers=color:red%7Clabel:C%7C40.718217,-73.998284&key=AIzaSyCzzvxmhc8TkqHA5lg-wPbNxedKbwes7-U&map_id=493ee6c0b8a901d9`
       );
