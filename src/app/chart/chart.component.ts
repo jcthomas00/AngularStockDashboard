@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Subject, BehaviorSubject, Observable, of } from 'rxjs';
 import { StockService } from '../stock.service';
-import { map, max, mergeMap, tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { Stocks } from 'src/Interfaces';
 import { DataService } from '../data.service';
 
@@ -199,11 +199,6 @@ export class ChartComponent implements OnInit {
             bounds: [16, 9.5], 
             pattern: "hour"
           }
-
-          // ,
-          // {
-          //   values: ["2021-01-01", "2021-01-18", "2021-02-15", "2021-04-02", "2021-05-31", "2021-07-05", "2021-09-06", "2021-11-25", "2021-12-25"]
-          // }
         ]
       }}
   };

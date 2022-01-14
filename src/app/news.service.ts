@@ -25,7 +25,7 @@ export class NewsService {
 
   public getStockNews(symbol:string):Observable<any> {
     return new Observable<any[]>((observer:any) => {
-      this.httpClient.get<Object>(`${this.url}?ticker=${symbol}?apiKey=${this.apiKey}`)
+      this.httpClient.get<Object>(`${this.url}?ticker=${symbol}&apiKey=${this.apiKey}`)
       .subscribe((response:any) => observer.next(response.results))
     })
   }
