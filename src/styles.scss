@@ -37,3 +37,7 @@ $dark-theme: mat.define-dark-theme((
 @import '~@fortawesome/fontawesome-free/scss/brands.scss';
  
 @import '~mdb-angular-ui-kit/assets/scss/mdb.scss';
+
+img {
+  max-width: 100%;
+}

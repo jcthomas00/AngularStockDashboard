@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CompanyinfoService } from '../companyinfo.service';
+import { DataService } from '../data.service';
 
 @Component({
   selector: 'app-company-info',
@@ -9,13 +10,16 @@ import { CompanyinfoService } from '../companyinfo.service';
 export class CompanyInfoComponent implements OnInit {
 
   info:any = {}
-  constructor(private companyInfoService:CompanyinfoService) { }
+  constructor(private companyInfoService:CompanyinfoService, private dataService:DataService) { }
 
   ngOnInit(): void {
-    // this.companyInfoService.getCompanyInfo('AAPL').subscribe((data) => {
-    //   this.info = data;
-    //   console.log('company info', data)
-    // })
+    this.dataService.symbol.subscribe(symbol => {
+      if(symbol !== ''){
+        this.companyInfoService.getCompanyInfo(symbol).subscribe((info) => {
+          this.info = info;
+        });
+      }
+    })
   }
 
 }

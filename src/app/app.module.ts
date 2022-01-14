@@ -38,6 +38,7 @@ import { PlotlyModule } from 'angular-plotly.js';
 import { NewsComponent } from './news/news.component';
 import { CompanyInfoComponent } from './company-info/company-info.component';
 import { SearchFilterPipe } from './search-filter.pipe';
+import { MapComponent } from './map/map.component';
 PlotlyModule.plotlyjs = PlotlyJS;
 
 @NgModule({
@@ -52,7 +53,8 @@ PlotlyModule.plotlyjs = PlotlyJS;
     ChartComponent,
     NewsComponent,
     CompanyInfoComponent,
-    SearchFilterPipe
+    SearchFilterPipe,
+    MapComponent
   ],
   imports: [
     BrowserModule,
