@@ -32,6 +32,7 @@ import * as PlotlyJS from 'plotly.js-dist';
 import { PlotlyModule } from 'angular-plotly.js';
 import { NewsComponent } from './news/news.component';
 import { CompanyInfoComponent } from './company-info/company-info.component';
+import { MapComponent } from './map/map.component';
 PlotlyModule.plotlyjs = PlotlyJS;
 
 @NgModule({
@@ -45,7 +46,8 @@ PlotlyModule.plotlyjs = PlotlyJS;
     AboutComponent,
     ChartComponent,
     NewsComponent,
-    CompanyInfoComponent
+    CompanyInfoComponent,
+    MapComponent
   ],
   imports: [
     BrowserModule,

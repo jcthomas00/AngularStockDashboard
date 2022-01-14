@@ -6,6 +6,7 @@
            <div *ngFor="let item of leftBar" class="card" cdkDrag>
             <app-news *ngIf="item===1"></app-news>
             <app-company-info *ngIf="item===2"></app-company-info>
+            <app-map *ngIf="item===3" [location]="curLocation"></app-map>
              </div>
       </div>
       <div class="col-lg-6 col-md-12 mb-4 order-1 order-lg-2 order-xl-2">
@@ -43,6 +44,7 @@
            <div *ngFor="let item of rightBar" class="card" cdkDrag>
             <app-news *ngIf="item===1"></app-news>
             <app-company-info *ngIf="item===2"></app-company-info>
+            <app-map *ngIf="item===3" [location]="curLocation"></app-map>
              </div>
       </div>
 
