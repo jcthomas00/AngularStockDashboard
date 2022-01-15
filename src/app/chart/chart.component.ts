@@ -58,8 +58,8 @@ export class ChartComponent implements OnInit {
                 high:   this.stocks.high.slice(),
                 low:    this.stocks.low.slice(),
                 open:   this.stocks.open.slice(),
-                decreasing: {line: {color: '#7F7F7F'}}, 
-                increasing: {line: {color: '#17BECF'}}, 
+                decreasing: {line: {color: 'white'}}, 
+                increasing: {line: {color: 'rgba(255,0,0,.25)'}}, 
                 line: {color: 'rgba(31,119,180,1)'}, 
                 type: 'candlestick', 
                 xaxis: 'x', 
@@ -177,20 +177,48 @@ export class ChartComponent implements OnInit {
         open: ['']
     },
     ],
+    config: {
+      responsive: true,
+      displayModeBar: false,
+      displaylogo: false,
+      showLink: false
+    },
     layout: {
       useResizeHandler: true,
+
+    paper_bgcolor: 'transparent',
+    plot_bgcolor: 'transparent',
       autosize: true,
-      title: 'Some Data to Hover Over',
-      margin: 0,
+      title: '',
+      margin: {
+        l: 50,
+        r: 50,
+        b: 50,
+        t: 0,
+        pad: 4
+      },
       yaxis: {
         autorange: true, 
-        fixedrange: false
+        fixedrange: false,
+        tickcolor: "rgba(255,255,255,0.75)",
+        tickwidth: 1,
+        
+        gridcolor: "rgba(255,255,255,0.25)",
+        gridwidth: 1,
+        
+        zerolinecolor: "green",
+        zerolinewidth: 2,
       },
       xaxis: {
+        tickcolor: "rgba(255,255,255,0)",
+        tickwidth: 0,
+        gridcolor: "rgba(255,255,255,.25)",
+        gridwidth: 2, 
+
         autorange: true, 
         domain: [0, 1], 
-        color: 'pink',
-        title: 'Dates',
+        color: 'rgba(255,255,255,.25)',
+        //title: 'Dates',
         rangebreaks: [
           {
             bounds: ["sat", "mon"] 

@@ -1,11 +1,10 @@
 <div class="card">
     <div class="card-header">News</div>
     <div class="card-body">
-      <ul>
+      <ul class="news-list">
           <li *ngFor="let news of newsList$ | async">
-              {{news.article_url}}
-              {{news.title}}
-              {{news.image_url}}
+            <img src="{{news.image_url}}" alt="{{news.title}}">
+            <a href="{{news.article_url}}" title="_blank">{{news.title}}</a>
           </li>
       </ul>
     </div>

@@ -1,7 +1,0 @@
-
-<button (click)="login()">Login</button>
-<div class="nav-item dropdown" *ngIf="getUser() | async as user;">
-      <img src="{{ user.photoURL }}" alt="{{ user.displayName }}">
-      Hello {{user.displayName}}    
-      <button (click)="logout()">Logout</button>
-</div>

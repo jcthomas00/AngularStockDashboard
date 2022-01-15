@@ -21,14 +21,16 @@ export class ComparisonChartComponent implements OnInit {
     this.stockService.getStockHistoricalData().subscribe((response)=>{
       this.stocks = <LineChart>{};
       this.stocks = {
-        x:      this.unpackArray(response.data[0].data, "timestamp"),
+        x:  this.unpackArray(response.data[0].data, "timestamp"),
         y:  this.unpackArray(response.data[0].data, "close"),
         decreasing: {line: {color: '#7F7F7F'}}, 
         increasing: {line: {color: '#17BECF'}}, 
-        line: {color: 'rgba(31,119,180,1)'}, 
-        type: 'line', 
+        line: {color: 'orange', line_shape: 'spline'}, 
+        type: 'scatter', 
         xaxis: 'x', 
-        yaxis: 'y' 
+        yaxis: 'y' ,
+        mode: 'lines',
+        connectgaps: true
     }
     })
   }
@@ -45,17 +47,28 @@ export class ComparisonChartComponent implements OnInit {
     layout: {
       useResizeHandler: true,
       autosize: true,
-      title: 'change',
-      margin: 0,
+      margin: {
+        l: 30,
+        r: 0,
+        b: 50,
+        t: 0,
+        pad: 0
+      },
       yaxis: {
         autorange: true, 
-        fixedrange: false
+        fixedrange: false,
+        showgrid: true,
+        zeroline: true,
+        showline: false,
+        showticklabels: true
       },
       xaxis: {
-        autorange: true, 
+        autorange: true,   
+        showline: false,
+        showgrid: false,
+        showticklabels: false,
         domain: [0, 1], 
         color: 'pink',
-        title: 'Dates',
         rangebreaks: [
           {
             bounds: ["sat", "mon"] 

@@ -20,7 +20,9 @@ export interface LineChart {
     line: {}, 
     type: string, 
     xaxis: string, 
-    yaxis: string 
+    yaxis: string,
+    mode: string,
+    connectgaps: boolean
 }; 
 
 export interface UserData {

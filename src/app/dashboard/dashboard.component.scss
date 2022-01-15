@@ -1,3 +1,156 @@
 .card{
     margin-bottom: 10px;
 }
+.main-nav{
+	background: var(--primary-color);
+	box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.1);
+	.navbar-brand img {
+		max-width: 153px;
+	}
+	.navbar-nav{
+		.nav-item{
+			position: relative;
+			.nav-link{
+				position: relative;
+				text-align: center;
+				font-size: 13px;
+				text-transform: uppercase;
+				color: var(--light);
+				padding-left: 15px;
+				padding-right: 15px;
+				background: none;
+				border: none;
+				font-weight: bold;
+				&.usr-icon{
+					padding-bottom: 0;
+					padding-top: 0;
+					img{
+						height: 40px;
+						width: 40px;
+						border: 1px solid rebeccapurple;
+						text-align: center;
+						border-radius: 100%;
+					}
+				}
+			}
+		}
+	}
+}
+
+// bootstrap override
+.navbar-toggler:focus, .navbar-toggler:hover{
+	outline: none;
+	box-shadow: none;
+}
+.navbar-nav {
+	align-items: center;
+}
+.large{
+	padding-top: 25px;
+	padding-bottom: 25px;
+}
+.small{
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+@media (min-width: 992px){
+	.navbar-expand-lg .navbar-collapse {
+		flex-flow: column;
+		align-items: flex-end;
+	}
+}
+
+.dropdown-menu button {
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 12px;
+}
+.mat-button-toggle-appearance-standard {
+    background: transparent;
+}
+.mat-button-toggle-appearance-standard .mat-button-toggle-label-content{
+    line-height: 40px
+}
+
+  .mat-button-toggle-group-appearance-standard .mat-button-toggle+.mat-button-toggle {
+    border: none;
+}
+
+.mat-button-toggle-group-appearance-standard {
+    border: 0;
+    border-bottom: 1px solid;
+    border-radius: 0;
+}
+
+.nav-item input.input-search {
+    background: none;
+    padding: 10px;
+    border: 0;
+    border-bottom: 1px solid #fff;
+}
+
+
+.mat-button-toggle-group .mat-button-toggle {
+    margin-bottom: -10px;
+}
+.mat-form-field-wrapper {
+    padding-bottom: 0 !important;
+}
+.no-bottom {
+    margin-bottom: -1.25em !important;
+  }
+.mat-form-field-appearance-legacy .mat-form-field-underline{        
+    bottom: 16px !important;
+    background-color: #fff;
+}
+li.nav-item {position: relative;}
+
+.nav-item table {
+    position: absolute;
+    background: rgba(0, 0, 0, .5);
+    width: 100%;
+}
+.nav-item td {
+    padding: 0 0 10px 10px;
+}
+.nav-item table tr:first-child td{
+    padding-top: 10px;
+}
+button.nav-link {
+    background: none;
+    border: 0;
+    border-bottom: 1px solid #fff;
+    color: #fff;
+    padding-bottom: 6px;
+}
+// .mat-form-field-underline{
+//     bottom: 0;
+// }
+ul.navbar-nav.ml-auto {
+    width: 100%;
+    justify-content: space-between;
+}
+.usr-img{
+    height: 40px;
+    width: 40px;
+    border: 1px solid rebeccapurple;
+    text-align: center;
+    border-radius: 100%;
+}
+ul.dropdown-menu {
+    display: none;
+}
+ul.dropdown-menu.show {
+    display: block;
+}
+.navbar-brand {
+    font-weight: 300;
+    padding: 15px 50px 0 0;
+}
+@media only screen and (max-width: 990px){
+    #main-panel .navbar-transparent #navbarNav{
+        background-color: rgba(0, 0, 0, .75);
+        padding: 20px
+    }
+}

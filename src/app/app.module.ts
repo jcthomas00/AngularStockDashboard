@@ -31,6 +31,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input'
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 // Plotly imports
 import * as PlotlyJS from 'plotly.js-dist-min';
@@ -75,6 +76,7 @@ PlotlyModule.plotlyjs = PlotlyJS;
     MatFormFieldModule,
     MatInputModule,
     MatButtonToggleModule,
+    MatAutocompleteModule,
     DragDropModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireModule,

@@ -4,6 +4,7 @@ import { DataService } from '../data.service';
 import { StockService } from '../stock.service';
 import { UserService } from '../user.service';
 import { AuthService } from '../auth.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,13 +21,13 @@ export class DashboardComponent implements OnInit {
   startDate:string = '2022-01-01'
 
   constructor(
-    private dataService:DataService,
+    public dataService:DataService,
     private stockService:StockService,
     private userService:UserService,
     private authService:AuthService
     ) { }
 
-  leftBar = [0,1,2];
+  leftBar = [1,];
   rightBar = [2,3];
   favorites:string[] = [];
 
@@ -55,12 +56,6 @@ export class DashboardComponent implements OnInit {
         })
       }
     });
-    // this.authService.getUser().subscribe(user => {
-    //   console.log(user)
-    //   if(user){
-    //     return this.db.collection('users').doc(user.uid).set(data); 
-    //   }else return null;
-    // })
   }
 
   onSelectStock(newSymbol:string) {
@@ -91,13 +86,13 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  onLogin() {
-    // this.userService.getUserData().subscribe(userInfo => {
-    //   console.log(userInfo)
-    //   // this.leftBar = userInfo.leftBar; 
-    //   // this.rightBar = userInfo.rightBar;
-    //   // this.favorites =  userInfo.favorites
-    // });
-    
+  login = () =>{
+    this.authService.login();
+  }
+  logout = () =>{
+    this.authService.logout();
+  }
+  getUser = ():Observable<any> =>{
+    return this.authService.getUser();
   }
 }

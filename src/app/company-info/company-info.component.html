@@ -1,13 +1,24 @@
 <div class="card">
-    <div class="card-header">Information</div>
+    <div class="card-header">
+      <a href="{{info.quoteSummary.result[0].assetProfile.website}}" target="_blank">
+        {{info.quoteSummary.result[0].quoteType.longName}}
+      </a>
+    </div>
     <div class="card-body">
-      <ul>
-          <li *ngIf="info.quoteSummary">
-              {{info.quoteSummary.result[0].quoteType.longName}}
-              {{info.quoteSummary.result[0].assetProfile.website}}
-              {{info.quoteSummary.result[0].assetProfile.phone}}
-              {{info.quoteSummary.result[0].assetProfile.longBusinessSummary}}
-          </li>
-      </ul>
+          <div *ngIf="info.quoteSummary">              
+            {{info.quoteSummary.result[0].assetProfile.longBusinessSummary}}
+              <hr>
+              <p>
+                Phone:  <a href="tel:{{info.quoteSummary.result[0].assetProfile.phone}}" target="_blank">
+                  {{info.quoteSummary.result[0].assetProfile.phone}}
+                </a>
+                
+              </p>
+              <p>
+                Website: <a href="{{info.quoteSummary.result[0].assetProfile.website}}" target="_blank">
+                  {{info.quoteSummary.result[0].quoteType.longName}}
+                </a>
+              </p>
+          </div>
     </div>
   </div>

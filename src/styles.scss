@@ -1,20 +1,43 @@
 @use '@angular/material' as mat;
-
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
 @include mat.core();
 
 // Define a light theme
-$light-primary: mat.define-palette(mat.$indigo-palette);
-$light-accent: mat.define-palette(mat.$pink-palette);
+$light-primary: mat.define-palette(mat.$orange-palette);
+$light-accent: mat.define-palette(mat.$orange-palette);
 $light-theme: mat.define-light-theme((
  color: (
    primary: $light-primary,
    accent: $light-accent,
  )
 ));
-
+$oronge-palette: (
+ 50: #fff2df,
+ 100: #ffddb0,
+ 200: #ffaf49,
+ 300: #ffaf49,
+ 400: #f47100,
+ 500: #f47100,
+ 600: #f47100,
+ 700: #f47100,
+ 800: #ee6002,
+ 900: #e54304,
+ contrast: (
+   50: rgba(black, 0.87),
+   100: rgba(black, 0.87),
+   200: rgba(black, 0.87),
+   300: white,
+   400: white,
+   500: white,
+   600: white,
+   700: white,
+   800: white,
+   900: white,
+ )
+);
 // Define a dark theme
-$dark-primary: mat.define-palette(mat.$pink-palette);
-$dark-accent: mat.define-palette(mat.$blue-gray-palette);
+$dark-primary: mat.define-palette($oronge-palette);
+$dark-accent: mat.define-palette($oronge-palette);
 $dark-theme: mat.define-dark-theme((
  color: (
    primary: $dark-primary,
@@ -40,4 +63,349 @@ $dark-theme: mat.define-dark-theme((
 
 img {
   max-width: 100%;
+}
+
+.main-panel {
+  position: relative;
+  background-color: #E3E3E3;
+  background-color: #ebecf1;
+  -webkit-transition: all 0.5s cubic-bezier(0.685, 0.0473, 0.346, 1);
+  -moz-transition: all 0.5s cubic-bezier(0.685, 0.0473, 0.346, 1);
+  -o-transition: all 0.5s cubic-bezier(0.685, 0.0473, 0.346, 1);
+  -ms-transition: all 0.5s cubic-bezier(0.685, 0.0473, 0.346, 1);
+  transition: all 0.5s cubic-bezier(0.685, 0.0473, 0.346, 1);
+}
+
+.main-panel>.content {
+  padding: 0 30px 30px;
+  min-height: calc(100vh - 123px);
+  margin-top: -30px;
+}
+
+.main-panel>.navbar {
+  margin-bottom: 0;
+}
+
+.main-panel .header {
+  margin-bottom: 50px;
+}
+
+.panel-header {
+  height: 260px;
+  padding-top: 80px;
+  padding-bottom: 45px;
+  background: #141E30;
+  /* fallback for old browsers */
+  background: -webkit-gradient(linear, left top, right top, from(#0c2646), color-stop(60%, #204065), to(#2a5788));
+  background: linear-gradient(to right, #0c2646 0%, #204065 60%, #2a5788 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.panel-header .header .title {
+  color: #FFFFFF;
+}
+
+.panel-header .header .category {
+  max-width: 600px;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 auto;
+  font-size: 13px;
+}
+
+.panel-header .header .category a {
+  color: #FFFFFF;
+}
+
+.panel-header-sm {
+  height: 135px;
+}
+
+.panel-header-lg {
+  height: 500px;
+}
+
+.navbar {
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+  min-height: 53px;
+  margin-bottom: 20px;
+  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.15);
+}
+
+.navbar a {
+  vertical-align: middle;
+}
+
+.navbar a:not(.btn):not(.dropdown-item) {
+  color: #FFFFFF;
+}
+
+.navbar a.dropdown-item {
+  color: #888;
+}
+
+.navbar.bg-white .input-group .form-control,
+.navbar.bg-white .input-group.no-border .form-control {
+  color: #888;
+}
+
+.navbar.bg-white .input-group .form-control::-moz-placeholder,
+.navbar.bg-white .input-group.no-border .form-control::-moz-placeholder {
+  color: #888;
+}
+
+.navbar.bg-white .input-group .form-control:-ms-input-placeholder,
+.navbar.bg-white .input-group.no-border .form-control:-ms-input-placeholder {
+  color: #888;
+}
+
+.navbar.bg-white .input-group .form-control::-webkit-input-placeholder,
+.navbar.bg-white .input-group.no-border .form-control::-webkit-input-placeholder {
+  color: #888;
+}
+
+.navbar.bg-white .input-group-prepend .input-group-text i,
+.navbar.bg-white .input-group-append .input-group-text i {
+  color: #888;
+  opacity: .5;
+}
+
+.navbar .form-group,
+.navbar .input-group {
+  margin: 0;
+  margin-left: -3px;
+  margin-right: 5px;
+}
+
+.navbar .form-group .form-group-addon,
+.navbar .form-group .input-group-prepend .input-group-text,
+.navbar .form-group .input-group-append .input-group-text,
+.navbar .input-group .form-group-addon,
+.navbar .input-group .input-group-prepend .input-group-text,
+.navbar .input-group .input-group-append .input-group-text {
+  color: #FFFFFF;
+}
+
+.navbar .form-group .form-group-addon i,
+.navbar .form-group .input-group-prepend .input-group-text i,
+.navbar .form-group .input-group-append .input-group-text i,
+.navbar .input-group .form-group-addon i,
+.navbar .input-group .input-group-prepend .input-group-text i,
+.navbar .input-group .input-group-append .input-group-text i {
+  opacity: 1;
+}
+
+.navbar .form-group.no-border .form-control,
+.navbar .input-group.no-border .form-control {
+  color: #FFFFFF;
+}
+
+.navbar .form-group.no-border .form-control::-moz-placeholder,
+.navbar .input-group.no-border .form-control::-moz-placeholder {
+  color: #FFFFFF;
+}
+
+.navbar .form-group.no-border .form-control:-ms-input-placeholder,
+.navbar .input-group.no-border .form-control:-ms-input-placeholder {
+  color: #FFFFFF;
+}
+
+.navbar .form-group.no-border .form-control::-webkit-input-placeholder,
+.navbar .input-group.no-border .form-control::-webkit-input-placeholder {
+  color: #FFFFFF;
+}
+
+.navbar p {
+  display: inline-block;
+  margin: 0;
+  line-height: 1.8em;
+  font-size: 1em;
+  font-weight: 400;
+}
+
+.navbar.navbar-absolute {
+  position: absolute;
+  width: 100%;
+  padding-top: 10px;
+  z-index: 1029;
+}
+
+.documentation .navbar.fixed-top {
+  left: 0;
+  width: initial;
+}
+
+.navbar .navbar-wrapper {
+  display: inline-flex;
+  align-items: center;
+}
+
+.navbar .navbar-wrapper .navbar-minimize {
+  padding-right: 10px;
+}
+
+.navbar .navbar-wrapper .navbar-minimize .btn {
+  margin: 0;
+}
+
+.navbar .navbar-wrapper .navbar-toggle .navbar-toggler {
+  padding-left: 0;
+}
+
+.navbar .navbar-wrapper .navbar-toggle:hover .navbar-toggler-bar.bar2 {
+  width: 22px;
+}
+
+.navbar .navbar-nav.navbar-logo {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: 49px;
+  top: -4px;
+}
+
+.navbar .navbar-nav .nav-link.btn {
+  padding: 11px 22px;
+}
+
+.navbar .navbar-nav .nav-link.btn.btn-lg {
+  padding: 15px 48px;
+}
+
+.navbar .navbar-nav .nav-link.btn.btn-sm {
+  padding: 5px 15px;
+}
+
+.navbar .navbar-nav .nav-link i.fa+p,
+.navbar .navbar-nav .nav-link i.now-ui-icons+p {
+  margin-left: 3px;
+}
+
+.navbar .navbar-nav .nav-link i.fa,
+.navbar .navbar-nav .nav-link i.now-ui-icons {
+  font-size: 18px;
+  position: relative;
+  top: 3px;
+  text-align: center;
+  width: 21px;
+}
+
+.navbar .navbar-nav .nav-link i.now-ui-icons {
+  top: 4px;
+  font-size: 16px;
+}
+
+.navbar .navbar-nav .nav-link.profile-photo .profile-photo-small {
+  width: 27px;
+  height: 27px;
+}
+
+.navbar .navbar-nav .nav-link.disabled {
+  opacity: .5;
+  color: #FFFFFF;
+}
+
+.navbar .navbar-nav .nav-item.active .nav-link:not(.btn),
+.navbar .navbar-nav .nav-item .nav-link:not(.btn):focus,
+.navbar .navbar-nav .nav-item .nav-link:not(.btn):hover,
+.navbar .navbar-nav .nav-item .nav-link:not(.btn):active {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 0.1875rem;
+  color: #FFFFFF;
+}
+
+.navbar .logo-container {
+  width: 27px;
+  height: 27px;
+  overflow: hidden;
+  margin: 0 auto;
+  border-radius: 50%;
+  border: 1px solid transparent;
+}
+
+
+.navbar .navbar-toggler {
+  width: 37px;
+  height: 27px;
+  vertical-align: middle;
+  outline: 0;
+  cursor: pointer;
+}
+
+.navbar .navbar-toggler .navbar-toggler-bar.navbar-kebab {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  margin: 0 auto;
+}
+
+.navbar .button-dropdown .navbar-toggler-bar:nth-child(2) {
+  width: 17px;
+}
+
+.navbar.navbar-transparent {
+  background-color: transparent !important;
+  box-shadow: none;
+  color: #FFFFFF;
+}
+
+.navbar.bg-white:not(.navbar-transparent) a:not(.dropdown-item):not(.btn) {
+  color: #888;
+}
+
+.navbar.bg-white:not(.navbar-transparent) a:not(.dropdown-item):not(.btn).disabled {
+  opacity: .5;
+  color: #888;
+}
+
+.navbar.bg-white:not(.navbar-transparent) .button-bar {
+  background: #888;
+}
+
+.navbar.bg-white:not(.navbar-transparent) .nav-item.active .nav-link:not(.btn),
+.navbar.bg-white:not(.navbar-transparent) .nav-item .nav-link:not(.btn):focus,
+.navbar.bg-white:not(.navbar-transparent) .nav-item .nav-link:not(.btn):hover,
+.navbar.bg-white:not(.navbar-transparent) .nav-item .nav-link:not(.btn):active {
+  background-color: rgba(222, 222, 222, 0.8);
+  color: #888;
+}
+
+.navbar.bg-white:not(.navbar-transparent) .logo-container {
+  border: 1px solid #888;
+}
+
+.content.container {
+  margin-top: -20px;
+}
+.card-header {
+  font-size: 1.714em;
+  line-height: 1.45em;
+  font-family: "Montserrat", "Helvetica Neue", Arial, sans-serif;
+}
+.card-header, .card-header a {
+  color: orange;
+}
+.news-list img {
+  /* float: left; */
+  max-width: 100px;
+  /* margin: 0 10px 10px 0; */
+  /* clear: both; */
+}
+
+.news-list a {
+  /* float: left; */
+  /* clear: right; */
+  text-transform: capitalize;
+  font-weight: 400;
+  color: #9A9A9A;
+  font-size: 1em;
+  font-family: "Montserrat", "Helvetica Neue", Arial, sans-serif;
+}
+
+.news-list li {
+  display: flex;
+  column-gap: 10px;
+  align-items: center;
 }
