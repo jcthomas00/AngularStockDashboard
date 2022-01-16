@@ -1,8 +1,9 @@
 <div *ngIf="dynamicStocks$ | async as stockInfo">
     <plotly-plot
-    [style]="{position: 'relative', width: '100%', height: '100%'}"
+        [style]="{position: 'relative', width: '100%', height: '100%'}"
         [data]="[stockInfo]"
         [layout]="graph1.layout"
         [config]=graph1.config
-        [useResizeHandler]="true"></plotly-plot>
+        [useResizeHandler]="true"
+    ></plotly-plot>
 </div>

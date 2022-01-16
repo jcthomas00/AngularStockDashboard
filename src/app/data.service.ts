@@ -8,9 +8,9 @@ export class DataService {
 
   symbol = new BehaviorSubject('AAPL');
   symbolChange = this.symbol.asObservable();
-  date = new BehaviorSubject('2022-01-01');
+  date = new BehaviorSubject('2021-01-01');
   dateChange = this.date.asObservable();
-  timeframe = new BehaviorSubject(5)
+  timeframe = new BehaviorSubject(-1)
   timeframeChange = this.timeframe.asObservable();
 
   constructor() { }

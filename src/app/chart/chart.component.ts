@@ -47,7 +47,9 @@ export class ChartComponent implements OnInit {
     this.dynamicStocks$ =  this.stockService.getStockLiveData([this.dataService.symbol.value]).pipe(
       tap((response)=>{
         console.log([this.dataService.symbol.value])
-        const newVals = response["new-value"].data[0], historical = this.stocks, lastIndex = historical.x.length-1;
+        const newVals = response["new-value"].data[0], 
+              historical = this.stocks, 
+              lastIndex = historical.x.length-1;
 
         historical.x[lastIndex]=newVals["timestamp"];
         historical.close[lastIndex]=newVals["close"];
@@ -62,8 +64,8 @@ export class ChartComponent implements OnInit {
                 high:   this.stocks.high.slice(),
                 low:    this.stocks.low.slice(),
                 open:   this.stocks.open.slice(),
-                decreasing: {line: {color: 'white'}}, 
-                increasing: {line: {color: 'rgba(255,0,0,.25)'}}, 
+                decreasing: {line: {color: 'orange'}}, 
+                increasing: {line: {color: 'white'}}, 
                 line: {color: 'rgba(31,119,180,1)'}, 
                 type: 'candlestick', 
                 xaxis: 'x', 
@@ -183,9 +185,9 @@ export class ChartComponent implements OnInit {
     ],
     config: {
       responsive: true,
-      displayModeBar: false,
       displaylogo: false,
-      showLink: false
+      showLink: false,
+      modeBarButtonsToRemove: ['pan2d','select2d','lasso2d','resetScale2d','toImage','zoom2d']
     },
     layout: {
       useResizeHandler: true,
@@ -197,15 +199,18 @@ export class ChartComponent implements OnInit {
       margin: {
         l: 50,
         r: 50,
-        b: 50,
+        b: 90,
         t: 0,
-        pad: 4
+      },
+      modebar:{
+        bgcolor: "transparent",
+        activecolor: 'orange'
       },
       yaxis: {
         autorange: true, 
         fixedrange: false,
-        tickcolor: "rgba(255,255,255,0.75)",
-        tickwidth: 1,
+        tickcolor: "rgba(255,255,255,0)",
+        tickwidth: 0,
         
         gridcolor: "rgba(255,255,255,0.25)",
         gridwidth: 1,
@@ -216,6 +221,7 @@ export class ChartComponent implements OnInit {
       xaxis: {
         tickcolor: "rgba(255,255,255,0)",
         tickwidth: 0,
+        tickformat: '%m/%d/%y %H:%M',
         gridcolor: "rgba(255,255,255,.25)",
         gridwidth: 2, 
 
@@ -223,6 +229,7 @@ export class ChartComponent implements OnInit {
         domain: [0, 1], 
         color: 'rgba(255,255,255,.25)',
         //title: 'Dates',
+        rangeslider: {visible: false},
         rangebreaks: [
           {
             // bounds: ["sat", "mon"] 
