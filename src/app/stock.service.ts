@@ -8,7 +8,8 @@ import { io } from 'socket.io-client';
 export class StockService {
 
   //private url = "https://nabors-stock-server.herokuapp.com/"
-  private url = "http://localhost:8080";
+  //private url = "http://localhost:8080";
+  private url = "https://stockserver-dash.herokuapp.com/"
   private socket:any = io(this.url);
 
   constructor() { }
@@ -26,12 +27,18 @@ export class StockService {
   }
 
   requestHistoricalData = async (syms:string[], tf:number, startDate:string) => {
-    return await this.asyncEmit('historical', {
-    'request-type': "historical",
-    symbols: syms,
-    timeframe: tf,
-    start: startDate,
-    })
+    // return await this.asyncEmit('historical', {
+    // 'request-type': "historical",
+    // symbols: syms,
+    // timeframe: tf,
+    // start: startDate,
+    // })
+    this.socket.emit('historical', {
+      'request-type': "historical",
+      symbols: syms,
+      timeframe: tf,
+      start: startDate,
+      })
   }
 
   //getStockHistoricalData 
@@ -40,6 +47,7 @@ export class StockService {
       if(data !== undefined) this.socket.emit(eventName, data)
       else this.socket.emit(eventName)
       this.socket.on(eventName, (result: any) => {
+        console.log(eventName,": ",result)
         this.socket.off(eventName)
         resolve(result)
       })
@@ -64,9 +72,11 @@ export class StockService {
 
   getStockLiveData = (symbols:string[]):Observable<any> => {
     this.socket.emit('live', {symbols:symbols});
+
+    console.log(symbols)
     return new Observable((observer:any) => {
       this.socket.on('live', (data:any) => {
-      //  console.log(data)
+        //console.log(data)
         observer.next(data);
       })
     })

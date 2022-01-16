@@ -23,6 +23,9 @@ export class ChartComponent implements OnInit {
   dynamicStocks$ :Observable<any> = of(null);
 
   ngOnInit(): void {
+    this.dataService.symbolChange.subscribe((newSym)=>{
+      this.stockService.requestHistoricalData([newSym], this.dataService.timeframe.value, this.dataService.date.value);
+    })
     this.stockService.getStockHistoricalData().subscribe((response)=>{
       this.stocks = <Stocks>{};
       this.stocks = {
@@ -38,11 +41,12 @@ export class ChartComponent implements OnInit {
         xaxis: 'x', 
         yaxis: 'y' 
     }
-    })
+    console.log("this.stocks: ", this.stocks)
+  })
 
     this.dynamicStocks$ =  this.stockService.getStockLiveData([this.dataService.symbol.value]).pipe(
       tap((response)=>{
-        //console.log([this.dataService.symbol.value])
+        console.log([this.dataService.symbol.value])
         const newVals = response["new-value"].data[0], historical = this.stocks, lastIndex = historical.x.length-1;
 
         historical.x[lastIndex]=newVals["timestamp"];
@@ -69,7 +73,7 @@ export class ChartComponent implements OnInit {
     )
 
     this.dynamicStocks$.subscribe(res=>{
-//      console.log("smell",res)
+      console.log("smell",res)
     // .subscribe((response) => {
     //   const vals = response["new-value"].data[0];
     //   const lastIndex = this.stocks.x.length-1;
@@ -166,7 +170,7 @@ export class ChartComponent implements OnInit {
   }
     
   title = 'dynamic-plots';
-  // Bar Chart
+  // Chart configurations
   graph1 = {
     data: [
       {  
@@ -221,11 +225,11 @@ export class ChartComponent implements OnInit {
         //title: 'Dates',
         rangebreaks: [
           {
-            bounds: ["sat", "mon"] 
+            // bounds: ["sat", "mon"] 
           },
           {
-            bounds: [16, 9.5], 
-            pattern: "hour"
+            // bounds: [16, 9.5], 
+            // pattern: "hour"
           }
         ]
       }}
@@ -235,14 +239,4 @@ export class ChartComponent implements OnInit {
     return array.map(array => array[key]);
   }
 
-  //interactivePlotSubject$: Subject<any> = new BehaviorSubject<any>(this.graph2.data);
-
-  hover(event: any): void {
-    // this.interactivePlotSubject$.next(
-    //   [this.graph2.data[event.points[0].pointIndex]]
-    // );
-  }
-  mouseLeave(event:any): void {
-    // this.interactivePlotSubject$.next(this.graph2.data);
-  }
 }
