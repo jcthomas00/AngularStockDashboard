@@ -72,8 +72,6 @@ export class StockService {
 
   getStockLiveData = (symbols:string[]):Observable<any> => {
     this.socket.emit('live', {symbols:symbols});
-
-    console.log(symbols)
     return new Observable((observer:any) => {
       this.socket.on('live', (data:any) => {
         //console.log(data)

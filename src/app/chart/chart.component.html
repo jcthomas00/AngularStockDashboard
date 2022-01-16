@@ -1,7 +1,7 @@
-<div *ngIf="dynamicStocks$ | async as stockInfo">
+<div *ngIf="stockToDisplay">
     <plotly-plot
         [style]="{position: 'relative', width: '100%', height: '100%'}"
-        [data]="[stockInfo]"
+        [data]="[stockToDisplay]"
         [layout]="graph1.layout"
         [config]=graph1.config
         [useResizeHandler]="true"

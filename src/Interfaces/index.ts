@@ -1,4 +1,5 @@
 export interface Stocks { 
+    symbol: string,
     x: string[],
     close: number[],
     high:   number[],

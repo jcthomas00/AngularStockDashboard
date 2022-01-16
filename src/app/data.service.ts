@@ -16,9 +16,8 @@ export class DataService {
   constructor() { }
 
   changeSymbol (symbol:string) {
-    console.log(symbol)
     this.symbol.next(symbol)
-    console.log('changeSymbol', this.symbol.value)
+    //console.log('changeSymbol', this.symbol.value)
   }
 
   changeDate (date: string) {
