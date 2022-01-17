@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { DataService } from '../data.service';
 
 @Component({
   selector: 'app-current-info',
@@ -7,9 +8,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CurrentInfoComponent implements OnInit {
 
-  constructor() { }
+  constructor(public dataService:DataService) { }
+
+  currentInfo:any;
+  up:number = 0;
 
   ngOnInit(): void {
+    this.dataService.getCurrentStats().subscribe((data:any)=>{
+      this.currentInfo = data;
+      if(data.close){
+        this.up = (data.open.toFixed(2)-data.close.toFixed(2))/data.open;
+      }
+    })
   }
 
 }

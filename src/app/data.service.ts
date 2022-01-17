@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, from } from 'rxjs';
+import { BehaviorSubject, from, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +14,7 @@ export class DataService {
   dateChange = this.date.asObservable();
   timeframe = new BehaviorSubject(-1)
   timeframeChange = this.timeframe.asObservable();
+  currentStats = new BehaviorSubject({});
 
   constructor() { }
 
@@ -25,6 +26,14 @@ export class DataService {
   getSymbols = () => {
     return from(this.symbols);
   } 
+
+  getCurrentStats = () => {
+    return from(this.currentStats)
+  }
+
+  setCurrentStats (currentStats: any) {
+    this.currentStats.next(currentStats)
+  }
 
   changeDate (date: string) {
     this.date.next(date)

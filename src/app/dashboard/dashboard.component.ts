@@ -30,7 +30,7 @@ export class DashboardComponent implements OnInit {
   symbols:string[] = ['AAPL'];
   timeframe:number = -1
   startDate:string = '2021-10-01'
-  leftBar = [1,];
+  leftBar = [4,1];
   rightBar = [2,3];
   favorites:string[] = [];  
   stocks:Stocks[] = [];  //symbol + data of all searches
@@ -77,9 +77,6 @@ export class DashboardComponent implements OnInit {
         else if(new Date(a.timestamp) < new Date(b.timestamp)){return -1}
         else return 0;
       });
-
-      console.log(response.data[0].symbol)
-
       if(this.dataService.symbol.value === response.data[0].symbol){
         this.stockToDisplay = {
           symbol: this.dataService.symbol.value,
@@ -119,15 +116,16 @@ export class DashboardComponent implements OnInit {
       tap((response)=>{
         const newVals = response["new-value"].data[0],
               liveSymbol = response["new-value"].symbol;
-        let candleStock, lastIndex:number;
+        let lastIndex:number;
 
-            historical = this.stocks.filter(stock => stock.symbol === liveSymbol)[0];
-            lastIndex = historical.x.length;
-            this.setStockValue(historical,lastIndex,newVals);
+        historical = this.stocks.filter(stock => stock.symbol === liveSymbol)[0];
+        lastIndex = historical.x.length;
+        this.setStockValue(historical,lastIndex,newVals);
 
-            if(liveSymbol === this.dataService.symbol.value){
-              this.setStockValue(this.stockToDisplay, this.stockToDisplay.x.length-1, newVals)
-            }
+        if(liveSymbol === this.dataService.symbol.value){
+          this.dataService.setCurrentStats(newVals);
+          this.setStockValue(this.stockToDisplay, this.stockToDisplay.x.length-1, newVals)
+        }
       })
     )
 

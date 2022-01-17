@@ -1,0 +1,6 @@
+table{
+    text-transform: uppercase;
+}
+.table > :not(caption) > * > *{
+    padding: 0;
+}
