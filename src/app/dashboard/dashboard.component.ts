@@ -33,7 +33,8 @@ export class DashboardComponent implements OnInit {
   leftBar = [1,];
   rightBar = [2,3];
   favorites:string[] = [];  
-  stocks:Stocks[] = [];
+  stocks:Stocks[] = [];  //symbol + data of all searches
+  comparisonStocks:string[] = []  // array for comparison
   stockToDisplay = <Stocks>{};
   dynamicStocks$ :Observable<any> = of(null);
 
