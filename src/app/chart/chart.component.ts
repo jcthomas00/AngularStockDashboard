@@ -74,7 +74,7 @@ export class ChartComponent implements OnInit {
         rangeslider: {visible: false},
         rangebreaks: [
           {
-            bounds: ["sat", "mon"] 
+            // bounds: ["sat", "mon"] 
           },
           {
             // bounds: [16, 9.5], 
