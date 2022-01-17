@@ -27,12 +27,6 @@ export class StockService {
   }
 
   requestHistoricalData = async (syms:string[], tf:number, startDate:string) => {
-    // return await this.asyncEmit('historical', {
-    // 'request-type': "historical",
-    // symbols: syms,
-    // timeframe: tf,
-    // start: startDate,
-    // })
     this.socket.emit('historical', {
       'request-type': "historical",
       symbols: syms,
@@ -40,27 +34,6 @@ export class StockService {
       start: startDate,
       })
   }
-
-  //getStockHistoricalData 
-  // public asyncEmit = (eventName: string, data?: any): Promise<any> => {
-  //   return new Promise((resolve, reject) => {
-  //     if(data !== undefined) this.socket.emit(eventName, data)
-  //     else this.socket.emit(eventName)
-  //     this.socket.on(eventName, (result: any) => {
-  //       console.log(eventName,": ",result)
-  //       this.socket.off(eventName)
-  //       resolve(result)
-  //     })
-  //     /* If no response after 1 second */
-  //     setTimeout(() => { reject(new Error('Server responded too slow... it might be down or lagging behind')) }, 5000)
-  //   })
-  // }
-
-  // public requestHistorical = async (tickers:string[]): Promise<HistoricalStockObject[]> => {
-  //   const data = await this.asyncEmit('historical', tickers)
-  //   return data.data
-  // }
-
 
   getStockHistoricalData = ():Observable<any> => {
     return new Observable((observer:any) => {
@@ -70,11 +43,14 @@ export class StockService {
     })
   }
 
-  getStockLiveData = (symbols:string[]):Observable<any> => {
-    this.socket.emit('live', {symbols:symbols});
+  requestLiveData = (symbol:string) => {
+    this.socket.emit('live', {symbols:[symbol]});
+  }
+
+  getStockLiveData = ():Observable<any> => {
     return new Observable((observer:any) => {
       this.socket.on('live', (data:any) => {
-        //console.log(data)
+        // console.log(data)
         observer.next(data);
       })
     })

@@ -17,10 +17,9 @@ export class DashboardComponent implements OnInit {
 
   query:string = ''
 
-//  symbols:string[] = ['AAPL', 'TSLA', 'NVDA', 'JPM', 'BAC','NBR', 'GOOG', 'AXP', 'COF', 'WFC', 'MSFT', 'FB', 'AMZN', 'GS', 'MS', 'V', 'GME', 'NFLX', 'KO', 'JNJ', 'CRM', 'PYPL', 'XOM', 'HD', 'DIS', 'INTC', 'COP', 'CVX', 'SBUX', 'OXY', 'WMT', 'MPC', 'SLB', 'PSX', 'VLO']
   symbols:string[] = [];
   timeframe:number = 5
-  startDate:string = '2022-01-01'
+  startDate:string = '2021-10-01'
 
   constructor(
     public dataService:DataService,
@@ -30,15 +29,15 @@ export class DashboardComponent implements OnInit {
     ) {
       this.stockService.requestHistoricalData([this.dataService.symbol.value], this.dataService.timeframe.value, this.dataService.date.value);
       this.stockService.requestStockList();
-      this.stockService.getStockList().subscribe(list => {this.symbols = list.symbols; console.log(list)});
+      this.stockService.getStockList().subscribe(list => {this.symbols = list.symbols;});
     }
 
   leftBar = [1,];
   rightBar = [2,3];
   favorites:string[] = [];  
   stocks:Stocks[] = [];
-  dynamicStocks$ :Observable<any> = of(null);
   stockToDisplay = <Stocks>{};
+  dynamicStocks$ :Observable<any> = of(null);
 
 
   drop(event: CdkDragDrop<any[]>): void {
@@ -51,9 +50,6 @@ export class DashboardComponent implements OnInit {
           event.currentIndex);
     }
     this.userService.setUserData({leftBar: this.leftBar, rightBar: this.rightBar, favorites: ['AAPL']})
-    console.log(this.leftBar)
-    console.log(this.rightBar)
-
   }
   ngOnInit(): void {
     //GET LOGIN INFO
@@ -67,14 +63,14 @@ export class DashboardComponent implements OnInit {
         })
       }
     });
+    this.dataService.symbolChange.subscribe((newSym)=>{
+      this.stockService.requestHistoricalData([newSym], this.dataService.timeframe.value, this.dataService.date.value);
+      this.stockService.requestLiveData(this.dataService.symbol.value);
+    });
     this.retrieveStockData();
   }
 
   retrieveStockData = () =>{
-
-    this.dataService.symbolChange.subscribe((newSym)=>{
-      this.stockService.requestHistoricalData([newSym], this.dataService.timeframe.value, this.dataService.date.value);
-    })
     this.stockService.getStockHistoricalData().subscribe((response)=>{
       this.stocks = this.stocks.filter(stock => stock.symbol !== this.dataService.symbol.value);
       this.stocks.push({
@@ -91,21 +87,21 @@ export class DashboardComponent implements OnInit {
         xaxis: 'x', 
         yaxis: 'y' 
     })
-    console.log("this.stocks: ", this.stocks)
+     console.log("this.stocks: ", this.stocks)
   })
 
-    this.dynamicStocks$ =  this.stockService.getStockLiveData([this.dataService.symbol.value]).pipe(
+    this.dynamicStocks$ =  this.stockService.getStockLiveData().pipe(
       tap((response)=>{
-        //console.log([this.dataService.symbol.value])
         const newVals = response["new-value"].data[0], 
               historical = this.stocks.filter(stock => stock.symbol === this.dataService.symbol.value)[0], 
               lastIndex = historical.x.length-1;
-
-        historical.x[lastIndex]=newVals["timestamp"];
-        historical.close[lastIndex]=newVals["close"];
-        historical.high[lastIndex]=newVals["high"];
-        historical.low[lastIndex]=newVals["low"];
-        historical.open[lastIndex]=newVals["open"];
+              if(response["new-value"].symbol === this.dataService.symbol.value){
+                      historical.x[lastIndex]=newVals["timestamp"];
+                      historical.close[lastIndex]=newVals["close"];
+                      historical.high[lastIndex]=newVals["high"];
+                      historical.low[lastIndex]=newVals["low"];
+                      historical.open[lastIndex]=newVals["open"];
+              }
       }),
       map((response)=>{
         const historical = this.stocks.filter(stock => stock.symbol === this.dataService.symbol.value)[0];
@@ -127,101 +123,9 @@ export class DashboardComponent implements OnInit {
     )
 
     this.dynamicStocks$.subscribe(res=>{
-      console.log("smell",res)
+      //console.log("smell",res)
       this.stockToDisplay = res;
-    // .subscribe((response) => {
-    //   const vals = response["new-value"].data[0];
-    //   const lastIndex = this.stocks.x.length-1;
-    //   this.stocks.x[lastIndex] = vals["timestamp"];
-    //   this.stocks.close[lastIndex] = vals["close"];
-    //   this.stocks.high[lastIndex] = vals["high"];
-    //   this.stocks.low[lastIndex] = vals["low"];
-    //   this.stocks.open[lastIndex] = vals["open"];
-    //   this.stocks.close = this.stocks.close;
-    //   //this.dynamicStocks = of(this.stocks)
-    // })
-
-    // this.stockInfo$ = this.histStockInfo$.pipe(mergeMap(historical =>  {
-    //   return this.stockService.getStockLiveData(["AAPL"]).pipe(map((response)=>{
-    //       const newVals = response["new-value"].data[0];
-    //       return{
-    //         x:      historical.x.push(newVals["timestamp"]),
-    //         close:  historical.close.push(newVals["close"]),
-    //         high:   historical.high.push(newVals["high"]),
-    //         low:    historical.low.push(newVals["low"]),
-    //         open:   historical.open.push(newVals["open"]),
-    //         decreasing: {line: {color: '#7F7F7F'}}, 
-    //         increasing: {line: {color: '#17BECF'}}, 
-    //         line: {color: 'rgba(31,119,180,1)'}, 
-    //         type: 'candlestick', 
-    //         xaxis: 'x', 
-    //         yaxis: 'y' 
-    //     }
-    //     }))
-    // })
-    // );
-
-// this.stockService.getStockHistoricalData().subscribe((res)=>{
-//   console.log(res)
-//   const vals = res.data[0].data;
-//   this.stocks = {
-//     x:      this.unpackArray(vals, "timestamp"),
-//     close:  this.unpackArray(vals, "close"),
-//     high:   this.unpackArray(vals, "high"),
-//     low:    this.unpackArray(vals, "low"),
-//     open:   this.unpackArray(vals, "open").slice(),
-//     decreasing: {line: {color: '#7F7F7F'}}, 
-//     increasing: {line: {color: '#17BECF'}}, 
-//     line: {color: 'rgba(31,119,180,1)'}, 
-//     type: 'candlestick', 
-//     xaxis: 'x', 
-//     yaxis: 'y'
-//   };
-  //this.stocks.x.slice()
-// })
-
-// this.stockService.getStockLiveData(["AAPL"]).subscribe((response) => {
-//   const vals = response["new-value"].data[0];
-//   const lastIndex = this.stocks.x.length-1;
-//   this.stocks.x[lastIndex] = vals["timestamp"];
-//   this.stocks.close[lastIndex] = vals["close"];
-//   this.stocks.high[lastIndex] = vals["high"];
-//   this.stocks.low[lastIndex] = vals["low"];
-//   this.stocks.open[lastIndex] = vals["open"];
-//   // this.stocks.decreasing = {line: {color: '#7F7F7F'}};
-//   // this.stocks.increasing = {line: {color: '#17BECF'}}; 
-//   // this.stocks.line= {color: 'rgba(31,119,180,1)'}; 
-//   // this.stocks.type= 'candlestick'; 
-//   // this.stocks.xaxis= 'x'; 
-//   // this.stocks.yaxis= 'y';
-//    this.stocks.close = this.stocks.close.slice();
-//   console.log("last Index: ",lastIndex)
-//   console.log(`time: ,${this.stocks.x[lastIndex]}
-//   | close: ,${this.stocks.close[lastIndex]}
-//   | high: ,${this.stocks.high[lastIndex]}
-//   `);
-// })
-    // this.histStockInfo$ = this.stockService.getStockHistoricalData().pipe(
-    //   tap(x=>console.log("yoyo")),
-    //     map((response)=>{
-    //       console.log("got historical data")
-    //       return{
-    //         x:      this.unpackArray(response.data[0].data, "timestamp"),
-    //         close:  this.unpackArray(response.data[0].data, "close"),
-    //         high:   this.unpackArray(response.data[0].data, "high"),
-    //         low:    this.unpackArray(response.data[0].data, "low"),
-    //         open:   this.unpackArray(response.data[0].data, "open").slice(),
-    //         decreasing: {line: {color: '#7F7F7F'}}, 
-    //         increasing: {line: {color: '#17BECF'}}, 
-    //         line: {color: 'rgba(31,119,180,1)'}, 
-    //         type: 'candlestick', 
-    //         xaxis: 'x', 
-    //         yaxis: 'y' 
-    //     }
-    //   })
-    // );    })
-
-      })
+    })
     
 
   }
@@ -239,7 +143,6 @@ export class DashboardComponent implements OnInit {
   }
 
   onDateChange = () => {
-    console.log(this.startDate)
     if (this.dataService.date.value !== this.startDate) {
       this.dataService.changeDate(this.startDate)
       this.stockService.requestHistoricalData([this.dataService.symbol.value], this.dataService.timeframe.value, this.dataService.date.value)

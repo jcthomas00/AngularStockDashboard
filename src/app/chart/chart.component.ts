@@ -12,7 +12,7 @@ export class ChartComponent implements OnInit {
 
   ngOnInit(): void {}
     
-  @Input() stockToDisplay = <Stocks>{};
+  @Input() stockToDisplay:any;
 
   // Chart configurations
   graph1 = {
@@ -74,7 +74,7 @@ export class ChartComponent implements OnInit {
         rangeslider: {visible: false},
         rangebreaks: [
           {
-            // bounds: ["sat", "mon"] 
+            bounds: ["sat", "mon"] 
           },
           {
             // bounds: [16, 9.5], 
