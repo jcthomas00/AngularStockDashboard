@@ -15,12 +15,6 @@ import { Stocks } from 'src/Interfaces';
 })
 export class DashboardComponent implements OnInit {
 
-  query:string = ''
-
-  symbols:string[] = [];
-  timeframe:number = 5
-  startDate:string = '2021-10-01'
-
   constructor(
     public dataService:DataService,
     private stockService:StockService,
@@ -32,6 +26,10 @@ export class DashboardComponent implements OnInit {
       this.stockService.getStockList().subscribe(list => {this.symbols = list.symbols;});
     }
 
+  query:string = ''
+  symbols:string[] = ['AAPL'];
+  timeframe:number = -1
+  startDate:string = '2021-10-01'
   leftBar = [1,];
   rightBar = [2,3];
   favorites:string[] = [];  
@@ -59,7 +57,6 @@ export class DashboardComponent implements OnInit {
           this.leftBar = userInfo.leftBar; 
           this.rightBar = userInfo.rightBar;
           this.favorites =  userInfo.favorites
-          console.log("lefty: ",this.leftBar)
         })
       }
     });
@@ -73,6 +70,32 @@ export class DashboardComponent implements OnInit {
   retrieveStockData = () =>{
     this.stockService.getStockHistoricalData().subscribe((response)=>{
       this.stocks = this.stocks.filter(stock => stock.symbol !== this.dataService.symbol.value);
+
+      response.data[0].data.sort((a:any,b:any) => {
+        if(new Date(a.timestamp) > new Date(b.timestamp)){return 1}
+        else if(new Date(a.timestamp) < new Date(b.timestamp)){return -1}
+        else return 0;
+      });
+
+      console.log(response.data[0].symbol)
+
+      if(this.dataService.symbol.value === response.data[0].symbol){
+        this.stockToDisplay = {
+          symbol: this.dataService.symbol.value,
+          x:      this.unpackArray(response.data[0].data, "timestamp"),
+          close:  this.unpackArray(response.data[0].data, "close"),
+          high:   this.unpackArray(response.data[0].data, "high"),
+          low:    this.unpackArray(response.data[0].data, "low"),
+          open:   this.unpackArray(response.data[0].data, "open"),
+          decreasing: {line: {color: '#7F7F7F'}}, 
+          increasing: {line: {color: '#17BECF'}}, 
+          line: {color: 'rgba(31,119,180,1)'}, 
+          type: 'candlestick', 
+          xaxis: 'x', 
+          yaxis: 'y' 
+        }
+      }
+
       this.stocks.push({
         symbol: this.dataService.symbol.value,
         x:      this.unpackArray(response.data[0].data, "timestamp"),
@@ -87,48 +110,44 @@ export class DashboardComponent implements OnInit {
         xaxis: 'x', 
         yaxis: 'y' 
     })
-     console.log("this.stocks: ", this.stocks)
   })
 
+    //update candlestick chart data
+    let historical:Stocks;
     this.dynamicStocks$ =  this.stockService.getStockLiveData().pipe(
       tap((response)=>{
-        const newVals = response["new-value"].data[0], 
-              historical = this.stocks.filter(stock => stock.symbol === this.dataService.symbol.value)[0], 
-              lastIndex = historical.x.length-1;
-              if(response["new-value"].symbol === this.dataService.symbol.value){
-                      historical.x[lastIndex]=newVals["timestamp"];
-                      historical.close[lastIndex]=newVals["close"];
-                      historical.high[lastIndex]=newVals["high"];
-                      historical.low[lastIndex]=newVals["low"];
-                      historical.open[lastIndex]=newVals["open"];
-              }
-      }),
-      map((response)=>{
-        const historical = this.stocks.filter(stock => stock.symbol === this.dataService.symbol.value)[0];
-              return {
-                symbol: this.dataService.symbol.value,
-                x:      historical.x.slice(),
-                close:  historical.close.slice(),
-                high:   historical.high.slice(),
-                low:    historical.low.slice(),
-                open:   historical.open.slice(),
-                decreasing: {line: {color: 'orange'}}, 
-                increasing: {line: {color: 'white'}}, 
-                line: {color: 'rgba(31,119,180,1)'}, 
-                type: 'candlestick', 
-                xaxis: 'x', 
-                yaxis: 'y', 
+        const newVals = response["new-value"].data[0],
+              liveSymbol = response["new-value"].symbol;
+        let candleStock, lastIndex:number;
+
+            historical = this.stocks.filter(stock => stock.symbol === liveSymbol)[0];
+            lastIndex = historical.x.length;
+            this.setStockValue(historical,lastIndex,newVals);
+
+            if(liveSymbol === this.dataService.symbol.value){
+              this.setStockValue(this.stockToDisplay, this.stockToDisplay.x.length-1, newVals)
             }
       })
     )
 
+    //push new data to candlestick chart
     this.dynamicStocks$.subscribe(res=>{
-      //console.log("smell",res)
-      this.stockToDisplay = res;
+      this.stockToDisplay = this.stockToDisplay;
+      console.log(this.stockToDisplay)
     })
-    
+  }//end of retrieveStockData()
 
+  setStockValue = (stock:Stocks, index:number, newVals:any) => {
+    console.log("setting");
+    stock.x[index]=newVals["timestamp"];
+    stock.close[index]=newVals["close"];
+    stock.high[index]=newVals["high"];
+    stock.low[index]=newVals["low"];
+    stock.open[index]=newVals["open"];
+    stock.x = [...stock.x];
+    stock.close = [...stock.close];
   }
+
   unpackArray = (array:any[], key:string) => {
     return array.map(array => array[key]);
   }
