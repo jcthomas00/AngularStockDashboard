@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { LineChart } from 'src/Interfaces';
 import { DataService } from '../data.service';
 import { StockService } from '../stock.service';
@@ -16,11 +16,13 @@ export class ComparisonChartComponent implements OnInit {
   ) { }
 
   stocks:LineChart = <LineChart>{};
+  @Input() stocksComparison:any;
+
   
   ngOnInit(): void {
     this.stockService.getStockHistoricalData().subscribe((response)=>{
-      this.stocks = <LineChart>{};
-      this.stocks = {
+      this.stocksComparison = <LineChart>{};
+      this.stocksComparison = {
         x:  this.unpackArray(response.data[0].data, "timestamp"),
         y:  this.unpackArray(response.data[0].data, "close"),
         decreasing: {line: {color: '#7F7F7F'}}, 
@@ -33,6 +35,7 @@ export class ComparisonChartComponent implements OnInit {
         connectgaps: true
     }
     })
+    console.log('stocksComparison', this.stocksComparison)
   }
 
   title = 'comparison-plots';
@@ -93,6 +96,10 @@ export class ComparisonChartComponent implements OnInit {
   }
   mouseLeave(event:any): void {
     // this.interactivePlotSubject$.next(this.graph2.data);
+  }
+
+  deleteStock(index:number): void {
+    this.stocksComparison.splice(index, 1)
   }
 
 }

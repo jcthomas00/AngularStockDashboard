@@ -17,10 +17,8 @@
   </tr>
 </table>
 </div>
-
     </div>
     <div class=" justify-content-end" id="navigation">
-
       <button (click)="login()">Login</button>
 <div class="nav-item dropdown" *ngIf="getUser() | async as user;">
   <img src="{{ user.photoURL }}" alt="{{ user.displayName }}">
@@ -106,8 +104,11 @@
       Stock Detail
     </div>
       <div class="card-body">
+        <div *ngFor="let stock of stocks">
+  {{stock.symbol}}: {{stock.close[stock.close.length-1]}}
+  <app-comparison-chart [stockClose]="stock.close" [times]="stock.x"></app-comparison-chart>
 
-        <app-comparison-chart></app-comparison-chart>
+</div>
         <div class="d-flex justify-content-between px-md-1">
           <div class="align-self-center">
             <i class="far fa-comment-alt text-warning fa-3x"></i>
@@ -144,4 +145,3 @@
 </div>
 </div>
 </div>
-

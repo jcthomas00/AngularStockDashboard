@@ -25,6 +25,7 @@
     "@types/plotly.js-dist-min": "^2.3.0",
     "angular-plotly.js": "^4.0.4",
     "firebase": "^9.6.2",
+    "font-awesome": "^4.7.0",
     "mdb-angular-ui-kit": "^1.6.0",
     "plotly.js-dist": "^2.8.3",
     "plotly.js-dist-min": "^2.8.3",
