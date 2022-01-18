@@ -3,6 +3,7 @@
 @include mat.core();
 
 $orange: #f96332;
+$blue: #141E30;
 $primary-color: $orange;
 // Define a light theme
 $light-primary: mat.define-palette(mat.$orange-palette);
@@ -433,5 +434,24 @@ bottom:-14px;
 width: 100%;
 }
 .search-result table tr td{
-padding: 5px;
+  padding: 5px;
 }
+.chip {
+  display: inline-block;
+  padding: 5px 25px;
+  border-radius: 25px;
+  background-color: #f1f1f1;
+}
+
+.closebtn {
+  padding-left: 10px;
+  color: $orange;
+  font-weight: bold;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.closebtn:hover {
+  color: $blue;
+}
+.comparisons ul {list-style: none;display: flex;column-gap: 10px;}

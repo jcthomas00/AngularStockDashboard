@@ -32,8 +32,11 @@ export class ComparisonChartComponent implements OnInit {
     //this.comparisonStocks.push(this.initialStock)
     console.log('check here', this.comparisonStocks);
     this.stockService.getStockList().subscribe(list => {this.symbols = list.symbols;});
+
+    console.log(this.stocks)
     this.dataService.getcomparisonSymbols().subscribe(symbols => {
       this.stocksToCompare = []; 
+
       symbols.forEach(sym => {
         this.retrieveStockData(sym)
         const stockToPush = this.stocks.filter((stock) => stock.symbol===sym)[0];

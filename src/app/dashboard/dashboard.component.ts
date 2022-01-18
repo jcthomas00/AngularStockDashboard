@@ -58,7 +58,9 @@ export class DashboardComponent implements OnInit {
         this.userService.getUserData(user.uid).subscribe(userInfo=>{
           this.leftBar = userInfo.leftBar; 
           this.rightBar = userInfo.rightBar;
-          this.favorites =  userInfo.favorites
+          userInfo.favorites.forEach((element:string) => {
+            this.dataService.setFavoritesSymbol(element);
+          });
         })
       }
     });
@@ -110,13 +112,14 @@ export class DashboardComponent implements OnInit {
           yaxis: 'y' 
         }
 
-        this.comparisonStocks.push(newlyReceivedStock)
+        //this.comparisonStocks.push(newlyReceivedStock)
         //set in stockToShow if this is selected stock
         if(this.dataService.symbol.value === company.symbol){
           this.stockToDisplay = newlyReceivedStock
         }
         //push the data into out stocks array
-        this.stocks.push(newlyReceivedStock)
+        if(this.stocks.filter((stock:Stocks)=> newlyReceivedStock.symbol === stock.symbol).length < 1)
+          this.stocks.push(newlyReceivedStock)
       });
       
   })

@@ -87,7 +87,7 @@ export class LineChartComponent implements OnInit {
         autorange: true, 
         fixedrange: false,
         showgrid: true,
-        zeroline: true,
+        zeroline: false,
         showline: false,
         showticklabels: true
       },
@@ -95,7 +95,7 @@ export class LineChartComponent implements OnInit {
         autorange: false,   
         showline: false,
         showgrid: false,
-        showticklabels: true,
+        showticklabels: false,
         domain: [0, 1], 
         color: 'pink',
         range: ['2022-01-01', '2022-01-17'],
