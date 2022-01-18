@@ -14,7 +14,7 @@ export class LineChartComponent implements OnInit {
 
   constructor() { }
 
-@Input() chartData:LineChart[] = [];
+  @Input() chartData:LineChart[] = [];
   @Input() comparisonStocks:Stocks[] = []
   stocks!:LineChart;
   data:LineChart[] = []
