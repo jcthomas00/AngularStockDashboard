@@ -1,13 +1,22 @@
-<input>
-<app-line-chart ></app-line-chart>
+<app-line-chart [comparisonStocks]='comparisonStocks' ></app-line-chart>
 <div>
     <ul>
         <li *ngFor='let stock of comparisonStocks; let i = index'>
-            <span >{{stock}}</span>
-            <div ngClass='btnContainer'>
-              <!-- <span (click) = "deleteStock(i)">X</span> -->
-            </div>
+            <span >{{ stock.symbol }} {{ stock.close[stock.close.length-1] }}</span>
+            <span (click) = "deleteStock(i)">X</span>
         </li>
     </ul>
     
+    <mat-form-field class="no-bottom example-full-width" >
+        <mat-label>Stock Search</mat-label>
+        <input #inputSearch matInput type="text" placeholder="Add Stock" [(ngModel)]="query">
+      </mat-form-field>
+      
+      <div *ngIf='query' class='search-result drop-doown'>
+      <table>
+        <tr class="item" *ngFor='let symbol of symbols | searchFilter: query' (click)="onSelectStock(symbol); inputSearch.value=''">
+          <td>{{ symbol }}</td>
+        </tr>
+      </table>
+      </div>
 </div>

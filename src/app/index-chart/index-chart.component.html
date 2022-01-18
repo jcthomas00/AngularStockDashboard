@@ -1,1 +1,7 @@
-<p>index-chart works!</p>
+<li class="nav-item">
+    <mat-button-toggle-group name="fontStyle" aria-label="Font Style" [(ngModel)]="stockIndex" (change)="onIndexChange()">
+      <mat-button-toggle value="nasdaq">Nasdaq</mat-button-toggle>
+      <mat-button-toggle value="dow">Dow</mat-button-toggle>
+      <mat-button-toggle value="snp">S&P 500</mat-button-toggle>
+      </mat-button-toggle-group>   
+  </li>

@@ -14,6 +14,7 @@ export class DataService {
   dateChange = this.date.asObservable();
   timeframe = new BehaviorSubject(-1)
   timeframeChange = this.timeframe.asObservable();
+  stockIndex:string = 'nasdaq'
 
   constructor() { }
 

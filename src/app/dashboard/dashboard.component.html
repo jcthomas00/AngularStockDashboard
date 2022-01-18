@@ -105,12 +105,10 @@
     </div>
       <div class="card-body">
         <div *ngFor="let stock of stocks">
-          {{stock.symbol}}: {{stock.close[stock.close.length-1]}}
-        <app-comparison-chart></app-comparison-chart>
-
+          <app-comparison-chart [comparisonStocks]="comparisonStocks" [stocks]="stocks"></app-comparison-chart>
         </div>
         
-         <!-- button add to array of comparisonStocks => filter from stocks, delete button removed from comparisonStocks -->
+
         <div class="d-flex justify-content-between px-md-1">
           <div class="align-self-center">
             <i class="far fa-comment-alt text-warning fa-3x"></i>

@@ -17,28 +17,50 @@ export class LineChartComponent implements OnInit {
   @Input() times:string[]=[]
   @Input() comparisonStocks:Stocks[] = []
   stocks!:LineChart;
+  data:LineChart[] = []
 
    ngOnInit(): void {
-       this.stocks = <LineChart>{};
-       this.updateVals();
+    this.stocks = <LineChart>{};
+    this.updateVals();
+  }
+
+  updateVals = () => {
+    this.data = []
+    this.comparisonStocks.forEach(element => {
+      this.stocks = {
+        x:  element.x,
+        y:  element.close,
+        decreasing: {line: {color: '#7F7F7F'}}, 
+        increasing: {line: {color: '#17BECF'}}, 
+        line: {color: 'orange', line_shape: 'spline'}, 
+        type: 'scatter', 
+        xaxis: 'x', 
+        yaxis: 'y' ,
+        mode: 'lines',
+        connectgaps: true
+      }
+      this.data.push(this.stocks)
+    })
 
   }
-  updateVals = () => {
-    this.stocks = {
-      x:  this.times,
-      y:  this.stockClose,
-      decreasing: {line: {color: '#7F7F7F'}}, 
-      increasing: {line: {color: '#17BECF'}}, 
-      line: {color: 'orange', line_shape: 'spline'}, 
-      type: 'scatter', 
-      xaxis: 'x', 
-      yaxis: 'y' ,
-      mode: 'lines+markers',
-      connectgaps: true
-    }
-  }
+  // updateVals = () => {
+  //   this.stocks = {
+  //     x:  this.times,
+  //     y:  this.stockClose,
+  //     decreasing: {line: {color: '#7F7F7F'}}, 
+  //     increasing: {line: {color: '#17BECF'}}, 
+  //     line: {color: 'orange', line_shape: 'spline'}, 
+  //     type: 'scatter', 
+  //     xaxis: 'x', 
+  //     yaxis: 'y' ,
+  //     mode: 'lines+markers',
+  //     connectgaps: true
+  //   }
+  //   this.data.push(this.stocks)
+  // }
+
   ngOnChanges() {
-    this.updateVals();
+   this.updateVals();
   }
 
   title = 'comparison-plots';
@@ -69,17 +91,14 @@ export class LineChartComponent implements OnInit {
         showticklabels: true
       },
       xaxis: {
-        autorange: true,   
+        autorange: false,   
         showline: false,
         showgrid: false,
         showticklabels: true,
         domain: [0, 1], 
         color: 'pink',
+        range: ['2022-01-01', '2022-01-17'],
+        type: 'date'
       }}
   };
-
-  unpackArray(array:any[], key:string) {
-    return array.map(array => array[key]);
-  }
-
 }

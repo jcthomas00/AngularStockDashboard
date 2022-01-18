@@ -34,7 +34,7 @@ export class DashboardComponent implements OnInit {
   rightBar = [2,3];
   favorites:string[] = [];  
   stocks:Stocks[] = [];  //symbol + data of all searches
-  comparisonStocks:string[] = []  // array for comparison
+  comparisonStocks:Stocks[] = []  // array for comparison
   stockToDisplay = <Stocks>{};
   dynamicStocks$ :Observable<any> = of(null);
 
@@ -111,6 +111,21 @@ export class DashboardComponent implements OnInit {
         xaxis: 'x', 
         yaxis: 'y' 
     })
+
+    this.comparisonStocks.push({
+      symbol: this.dataService.symbol.value,
+      x:      this.unpackArray(response.data[0].data, "timestamp"),
+      close:  this.convertUnpackedArray(response.data[0].data, "close"),
+      high:   this.unpackArray(response.data[0].data, "high"),
+      low:    this.unpackArray(response.data[0].data, "low"),
+      open:   this.unpackArray(response.data[0].data, "open"),
+      decreasing: {line: {color: '#7F7F7F'}}, 
+      increasing: {line: {color: '#17BECF'}}, 
+      line: {color: 'rgba(31,119,180,1)'}, 
+      type: 'candlestick', 
+      xaxis: 'x', 
+      yaxis: 'y' 
+  })
   })
 
     //update candlestick chart data
@@ -152,6 +167,12 @@ export class DashboardComponent implements OnInit {
   unpackArray = (array:any[], key:string) => {
     return array.map(array => array[key]);
   }
+
+  convertUnpackedArray = (array:any[], key:string) => {
+    let initial = array[0][key]
+    return array.map(array => (array[key]-initial)/initial);
+  }
+
   onSelectStock = (newSymbol:string) => {
     this.query = ''
     console.log(newSymbol, this.timeframe, this.startDate)
