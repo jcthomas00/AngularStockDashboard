@@ -27,8 +27,8 @@ export class FavoritesComponent {
   addFavorite = (symbol:string) => {
     if(this.favorites.indexOf(symbol) < 0){
       this.favorites.push(symbol)
-      this.dataService.setFavoritesSymbol(this.favorites);
     }
+    this.dataService.setFavoritesSymbol(this.favorites);
   }
 
   onSelectStock = (newSymbol:string) => {
@@ -37,11 +37,9 @@ export class FavoritesComponent {
     this.dataService.changeSymbol(newSymbol);
   }
 
- 
-
- 
   deleteStock(index:number): void {
     this.favorites.splice(index, 1)
+    this.dataService.setFavoritesSymbol(this.favorites);
   }
   
 }

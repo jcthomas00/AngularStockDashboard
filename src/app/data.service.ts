@@ -40,7 +40,6 @@ export class DataService {
     }
   }
   getcomparisonSymbols = () => {
-    console.log('comparison symbol', this.symbolComparison.value)
     return from(this.symbolComparison)
   }
 
@@ -48,7 +47,7 @@ export class DataService {
       this.symbolFavorites.next(symbols)
   }
   getFavoritesSymbols = () => {
-    console.log('Favorites symbol', this.symbolFavorites.value)
+    console.log('Favorites symbol', this.symbolFavorites)
     return from(this.symbolFavorites)
   }
   setCurrentStats (currentStats: any) {
