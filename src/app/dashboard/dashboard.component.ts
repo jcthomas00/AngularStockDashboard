@@ -60,6 +60,10 @@ export class DashboardComponent implements OnInit {
           this.rightBar = userInfo.rightBar;
           this.dataService.setFavoritesSymbol(userInfo.favorites);
         })
+      }else{
+        this.favorites = [];
+        this.dataService.setFavoritesSymbol(this.favorites);
+        console.log(this.favorites);
       }
     });
 

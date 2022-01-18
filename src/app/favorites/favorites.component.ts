@@ -18,6 +18,7 @@ export class FavoritesComponent {
   constructor(private dataService:DataService, private userService:UserService, private stockService:StockService){
     dataService.getFavoritesSymbols().subscribe((symbols:string[]) => {
       this.favorites = symbols;
+      console.log("syms", symbols)
     })
     this.stockService.getStockList().subscribe(list => {
       this.symbols = list.symbols;

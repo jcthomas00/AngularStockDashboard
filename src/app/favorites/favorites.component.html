@@ -3,7 +3,7 @@
       Favorites
     </div>
       <div class="card-body">
-        <ul>
+        <ul *ngIf="favorites.length > 0">
             <li *ngFor="let stock of favorites; let i = index" (click)="onSelectStock(stock); inputSearch.value=''">
                     <img src="../../assets/company-logo/{{stock}}.svg" alt="{{stock}}">
                     <span class="badge rounded-pill  bg-dark " (click) = "deleteStock(i)">
