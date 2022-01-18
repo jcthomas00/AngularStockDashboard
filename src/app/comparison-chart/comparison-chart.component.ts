@@ -1,87 +1,215 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { LineChart, Stocks } from 'src/Interfaces';
+import { Component, OnInit } from '@angular/core';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { DataService } from '../data.service';
 import { StockService } from '../stock.service';
+import { UserService } from '../user.service';
+import { AuthService } from '../auth.service';
+import { Observable, of } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { Stocks } from 'src/Interfaces';
 
 @Component({
-  selector: 'app-comparison-chart',
-  templateUrl: './comparison-chart.component.html',
-  styleUrls: ['./comparison-chart.component.scss']
+  selector: 'app-dashboard',
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.scss']
 })
-export class ComparisonChartComponent implements OnInit {
+export class DashboardComponent implements OnInit {
 
   constructor(
     public dataService:DataService,
-    private stockService:StockService
-  ) { }
-
-  @Input() initialStock = <Stocks>{};
-  @Input() comparisonStocks:Stocks[] = []
-  @Input () stocks:Stocks[] = [];
+    private stockService:StockService,
+    private userService:UserService,
+    private authService:AuthService
+    ) {
+      this.stockService.requestHistoricalData([this.dataService.symbol.value], this.dataService.timeframe.value, this.dataService.date.value);
+      this.stockService.requestStockList();
+      this.stockService.getStockList().subscribe(list => {console.log(list); this.symbols = list.symbols;});
+    }
 
   query:string = ''
   symbols:string[] = [];
   timeframe:number = -1
   startDate:string = '2021-01-01'
-  stocksToCompare:Stocks[] = [];
-  symbolsToCompare:string[] = [];
-  chartData:LineChart[] = [];
-  color:string[] = []
+  leftBar = [4,1];
+  rightBar = [2,3];
+  favorites:string[] = [];  
+  stocks:Stocks[] = [];  //symbol + data of all searches
+  comparisonStocks:Stocks[] = []  // array for comparison
 
+  stockToDisplay = <Stocks>{};
+  dynamicStocks$ :Observable<any> = of(null);
+
+
+  drop(event: CdkDragDrop<any[]>): void {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(event.previousContainer.data,
+          event.container.data,
+          event.previousIndex,
+          event.currentIndex);
+    }
+    this.userService.setUserData({leftBar: this.leftBar, rightBar: this.rightBar, favorites: this.favorites})
+  }
   ngOnInit(): void {
-    //this.comparisonStocks.push(this.initialStock)
-    console.log('check here', this.comparisonStocks);
-    this.stockService.getStockList().subscribe(list => {
-      this.symbols = list.symbols;
-      console.log('stock list', this.symbols)
-    });
-    //console.log('stock list', this.symbols)
-    this.dataService.getcomparisonSymbols().subscribe(symbols => {
-        this.stocksToCompare = []; 
-        symbols.forEach(sym => {
-          this.retrieveStockData(sym)
-          const stockToPush = this.stocks.filter((stock) => stock.symbol===sym)[0];
-          console.log(this.stocks)
-          console.log(stockToPush)
-          stockToPush.close.forEach((closingVal, index) => {
-            stockToPush.close[index] = closingVal //(closingVal-stockToPush.close[stockToPush.close.length-10])/stockToPush.close[stockToPush.close.length-10]
-          })
-          this.stocksToCompare.push(stockToPush)
+    //GET LOGIN INFO
+    this.authService.getUser().subscribe(user => {
+      if(user){
+        this.userService.getUserData(user.uid).subscribe(userInfo=>{
+          this.leftBar = userInfo.leftBar; 
+          this.rightBar = userInfo.rightBar;
+          this.dataService.setFavoritesSymbol(userInfo.favorites);
         })
-      
-      this.chartData = [];
-      this.stocksToCompare.forEach((element,index) => {
-        this.chartData.push({
-          x:  element.x,
-          y:  element.close,
-          name: element.symbol,
-          decreasing: {line: {color: '#7F7F7F'}}, 
-          increasing: {line: {color: '#17BECF'}}, 
-          line: {line_shape: 'spline'}, 
-          type: 'scatter', 
-          xaxis: 'x', 
-          yaxis: 'y' ,
-          mode: 'lines+markers',
-          connectgaps: true
-        });
-      })
+      }
+    });
+
+    this.dataService.getFavoritesSymbols().subscribe((symbols:string[]) => {
+      if(symbols.length === this.favorites.length && symbols.every((value:string, index:number) => value === this.favorites[index])){}else{
+        this.favorites = symbols;
+        this.dataService.setFavoritesSymbol(this.favorites);
+        this.userService.setUserData({leftBar: this.leftBar, rightBar: this.rightBar, favorites: this.favorites})
+      }
+    })
+    this.dataService.symbolChange.subscribe((newSym)=>{
+      this.stockService.requestHistoricalData([newSym], this.dataService.timeframe.value, this.dataService.date.value);
+      this.stockService.requestLiveData(this.dataService.symbol.value);
+    });
+    this.retrieveStockData();
+
+    this.stockService.requestHistoricalData(this.favorites, this.dataService.timeframe.value, this.dataService.date.value);
+    this.favorites.map(fav => {
+      this.stockService.requestLiveData(fav);
     })
   }
 
+  getFavStocks = () => {
+    const favs = this.stocks.filter(stock => this.favorites.includes(stock.symbol));
+    //console.log("favs", this.favorites, this.stocks)
+    // favs.forEach((fav) => {
+    //   fav.x = fav.x.slice(fav.x.length-11, 10);
+    //   fav.close = fav.close.slice(fav.close.length-11, 10);
+    // })
+    return favs;
+  }
+
+  retrieveStockData = () =>{
+    this.stockService.getStockHistoricalData().subscribe((response)=>{
+
+      response.data.forEach((company:any) => {
+        //sort each dataset
+        company.data.sort((a:any,b:any) => {
+          if(new Date(a.timestamp) > new Date(b.timestamp)){return 1}
+          else if(new Date(a.timestamp) < new Date(b.timestamp)){return -1}
+          else return 0;
+        });
+
+        const newlyReceivedStock = {
+          symbol: company.symbol,
+          x:      this.unpackArray(company.data, "timestamp"),
+          close:  this.unpackArray(company.data, "close"),
+          high:   this.unpackArray(company.data, "high"),
+          low:    this.unpackArray(company.data, "low"),
+          open:   this.unpackArray(company.data, "open"),
+          decreasing: {line: {color: '#aaa'}}, 
+          increasing: {line: {color: 'orange'}}, 
+          line: {color: 'rgba(31,119,180,1)'}, 
+          type: 'candlestick', 
+          xaxis: 'x', 
+          yaxis: 'y' 
+        }
+
+        //this.comparisonStocks.push(newlyReceivedStock)
+        //set in stockToShow if this is selected stock
+        if(this.dataService.symbol.value === company.symbol){
+          this.stockToDisplay = newlyReceivedStock
+        }
+        //push the data into out stocks array
+        if(this.stocks.filter((stock:Stocks)=> newlyReceivedStock.symbol === stock.symbol).length < 1)
+          this.stocks.push(newlyReceivedStock)
+      });
+      
+  })
+
+    //update candlestick chart data
+    let historical:Stocks;
+    this.dynamicStocks$ =  this.stockService.getStockLiveData().pipe(
+      tap((response)=>{
+        const newVals = response["new-value"].data[0],
+              liveSymbol = response["new-value"].symbol;
+        let lastIndex:number;
+
+        historical = this.stocks.filter(stock => stock.symbol === liveSymbol)[0];
+        if(historical){
+          lastIndex = historical.x.length;
+          this.setStockValue(historical,lastIndex,newVals);
+        }
+
+        if(liveSymbol === this.dataService.symbol.value){
+          this.dataService.setCurrentStats(newVals);
+          this.setStockValue(this.stockToDisplay, this.stockToDisplay.x.length-1, newVals)
+        }
+      })
+    )
+
+    //push new data to candlestick chart
+    this.dynamicStocks$.subscribe(res=>{
+      this.stockToDisplay = this.stockToDisplay;
+    })
+  }//end of retrieveStockData()
+
+  setStockValue = (stock:Stocks, index:number, newVals:any) => {
+    stock.x[index]=newVals["timestamp"];
+    stock.close[index]=newVals["close"];
+    stock.high[index]=newVals["high"];
+    stock.low[index]=newVals["low"];
+    stock.open[index]=newVals["open"];
+    stock.x = [...stock.x];
+    stock.close = [...stock.close];
+  }
+
+  unpackArray = (array:any[], key:string) => {
+    return array.map(array => array[key]);
+  }
+
+  convertUnpackedArray = (array:any[], key:string) => {
+    let initial = array[0][key]
+    return array.map(array => (array[key]-initial)/initial);
+  }
+
   onSelectStock = (newSymbol:string) => {
-    this.dataService.setcomparisonSymbol(newSymbol)
     this.query = ''
+    console.log(newSymbol, this.timeframe, this.startDate)
     if (this.dataService.symbol.value !== newSymbol) {
-     // this.stockService.requestHistoricalData([this.dataService.symbol.value], this.dataService.timeframe.value, this.dataService.date.value)
-      this.retrieveStockData(newSymbol)
+      this.dataService.changeSymbol(newSymbol)
+      this.stockService.requestHistoricalData([this.dataService.symbol.value], this.dataService.timeframe.value, this.dataService.date.value)
+      console.log('onSymbolChange', this.dataService.symbol.value, this.dataService.timeframe.value, this.dataService.date.value)
     }
   }
 
-  retrieveStockData = (newSymbol:string) =>{
-    this.stockService.requestHistoricalData([newSymbol], this.dataService.timeframe.value, this.dataService.date.value)
+  onDateChange = () => {
+    if (this.dataService.date.value !== this.startDate) {
+      this.dataService.changeDate(this.startDate)
+      this.stockService.requestHistoricalData([this.dataService.symbol.value], this.dataService.timeframe.value, this.dataService.date.value)
+      console.log('onDateChange', this.dataService.symbol.value, this.dataService.timeframe.value, this.dataService.date.value)
+    }
   }
 
-  deleteStock(index:number): void {
-    this.stocksToCompare.splice(index, 1)
+  onTimeframeChange = () => {
+    console.log(this.timeframe)
+    if (this.dataService.timeframe.value !== this.timeframe) {
+      this.dataService.changeTimeframe(this.timeframe)
+      this.stockService.requestHistoricalData([this.dataService.symbol.value], this.dataService.timeframe.value, this.dataService.date.value)
+      console.log('onTimeframeChange', this.dataService.symbol.value, this.dataService.timeframe.value, this.dataService.date.value)
+    }
+  }
+
+  login = () =>{
+    this.authService.login();
+  }
+  logout = () =>{
+    this.authService.logout();
+  }
+  getUser = ():Observable<any> =>{
+    return this.authService.getUser();
   }
 }
