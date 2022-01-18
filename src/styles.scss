@@ -454,4 +454,10 @@ width: 100%;
 .closebtn:hover {
   color: $blue;
 }
-.comparisons ul {list-style: none;display: flex;column-gap: 10px;}
+.comparisons ul, .favorites ul {
+  list-style: none;
+  display: flex;
+  column-gap: 10px;
+  row-gap: 20px;
+  flex-wrap: wrap;
+}

@@ -9,8 +9,8 @@ export class DataService {
   symbol = new BehaviorSubject('AAPL');
   symbols:string[] = [];
   symbolChange = this.symbol.asObservable();
-  symbolComparison = new BehaviorSubject<string[]>([]);
-  symbolFavorites = new BehaviorSubject<string[]>([]);
+  symbolComparison = new BehaviorSubject<string[]>(['AAPL']);
+  symbolFavorites = new BehaviorSubject<string[]>(['AAPL']);
   date = new BehaviorSubject('2021-01-01');
   dateChange = this.date.asObservable();
   timeframe = new BehaviorSubject(-1)
@@ -39,6 +39,11 @@ export class DataService {
       this.symbolComparison.next([symbol].concat(this.symbolComparison.value))
     }
   }
+
+  deletecomparisonSymbol (delSymbol: string) {
+      this.symbolComparison.next(this.symbolComparison.value.filter((symbol:string) => symbol !== delSymbol))
+  }
+
   getcomparisonSymbols = () => {
     return from(this.symbolComparison)
   }

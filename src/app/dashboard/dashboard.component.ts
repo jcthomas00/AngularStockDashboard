@@ -32,7 +32,7 @@ export class DashboardComponent implements OnInit {
   startDate:string = '2021-01-01'
   leftBar = [4,1];
   rightBar = [2,3];
-  favorites:string[] = ['BAC', 'TSLA'];  
+  favorites:string[] = [];  
   stocks:Stocks[] = [];  //symbol + data of all searches
   comparisonStocks:Stocks[] = []  // array for comparison
 
@@ -49,7 +49,7 @@ export class DashboardComponent implements OnInit {
           event.previousIndex,
           event.currentIndex);
     }
-    this.userService.setUserData({leftBar: this.leftBar, rightBar: this.rightBar, favorites: ['AAPL']})
+    this.userService.setUserData({leftBar: this.leftBar, rightBar: this.rightBar, favorites: this.favorites})
   }
   ngOnInit(): void {
     //GET LOGIN INFO
@@ -58,12 +58,18 @@ export class DashboardComponent implements OnInit {
         this.userService.getUserData(user.uid).subscribe(userInfo=>{
           this.leftBar = userInfo.leftBar; 
           this.rightBar = userInfo.rightBar;
-          userInfo.favorites.forEach((element:string) => {
-            this.dataService.setFavoritesSymbol(element);
-          });
+          this.dataService.setFavoritesSymbol(userInfo.favorites);
         })
       }
     });
+
+    this.dataService.getFavoritesSymbols().subscribe((symbols:string[]) => {
+      if(symbols.length === this.favorites.length && symbols.every((value:string, index:number) => value === this.favorites[index])){}else{
+        this.favorites = symbols;
+        this.dataService.setFavoritesSymbol(this.favorites);
+        this.userService.setUserData({leftBar: this.leftBar, rightBar: this.rightBar, favorites: this.favorites})
+      }
+    })
     this.dataService.symbolChange.subscribe((newSym)=>{
       this.stockService.requestHistoricalData([newSym], this.dataService.timeframe.value, this.dataService.date.value);
       this.stockService.requestLiveData(this.dataService.symbol.value);
