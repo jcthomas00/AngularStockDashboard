@@ -37,6 +37,8 @@ export class ComparisonChartComponent implements OnInit {
       symbols.forEach(sym => {
         this.retrieveStockData(sym)
         const stockToPush = this.stocks.filter((stock) => stock.symbol===sym)[0];
+        console.log(this.stocks)
+        console.log(stockToPush)
         stockToPush.close.forEach((closingVal, index) => {
           stockToPush.close[index] = closingVal//(closingVal-stockToPush.close[stockToPush.close.length-1])/stockToPush.close[stockToPush.close.length-1]
         })
@@ -76,6 +78,6 @@ export class ComparisonChartComponent implements OnInit {
   }
 
   deleteStock(index:number): void {
-    this.comparisonStocks.splice(index, 1)
+    this.stocksToCompare.splice(index, 1)
   }
 }

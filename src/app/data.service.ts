@@ -22,6 +22,7 @@ export class DataService {
   changeSymbol (symbol:string) {
     this.symbol.next(symbol)
     if(this.symbols.filter(sym => sym === symbol).length < 1){ this.symbols.push(symbol) };
+    
   }
 
   getSymbols = () => {
@@ -38,7 +39,9 @@ export class DataService {
     }
   }
   getcomparisonSymbols = () => {
+    console.log('comparison symbol', this.symbolComparison.value)
     return from(this.symbolComparison)
+
   }
 
   setCurrentStats (currentStats: any) {
