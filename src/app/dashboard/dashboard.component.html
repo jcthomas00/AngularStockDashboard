@@ -81,48 +81,21 @@
   </div>
 
   <div class="col-lg-6 col-md-12 mb-4 order-1 order-lg-2 order-xl-2">
-    <div class="card">
-    <div class="card-header">
-      Stock Detail
-    </div>
-      <div class="card-body">
-          <div *ngFor="let fav of getFavStocks()">
-            <app-favorites [stock]="fav"></app-favorites>
-          </div>
-
-        <div *ngIf="stocks">
-          <!-- {{stock.symbol}}: {{stock.close[stock.close.length-1]}} -->
-        <!-- <app-line-chart [stockClose]="stock.close" [times]="stock.x" ></app-line-chart>-->
         <app-comparison-chart [comparisonStocks]="comparisonStocks" [stocks]="stocks"></app-comparison-chart> 
-  
-        </div>
-        
 
-        <div class="d-flex justify-content-between px-md-1">
-          <div class="align-self-center">
-            <i class="far fa-comment-alt text-warning fa-3x"></i>
-          </div>
-          <div class="text-end">
-            <h3>156</h3>
-            <p class="mb-0">New Comments</p>
+        <div class="card mt-3">
+          <div class="card-body">
+            <div class="d-flex justify-content-between px-md-1">
+              
+                <app-favorites *ngFor="let fav of getFavStocks()" [stock]="fav"></app-favorites>
+            </div>
           </div>
         </div>
-      </div>
+
     </div>
-    <div class="card">
-        <div class="card-body">
-          <div class="d-flex justify-content-between px-md-1">
-            <div>
-              <h3 class="text-warning">64.89 %</h3>
-              <p class="mb-0">Conversion Rate</p>
-            </div>
-            <div class="align-self-center">
-              <i class="fas fa-chart-pie text-warning fa-3x"></i>
-            </div>
-          </div>
-        </div>
-      </div>
-  </div>
+
+
+
   
   <div cdkDropList #rightSide="cdkDropList"  [cdkDropListData]="rightBar" [cdkDropListConnectedTo]="leftSide"
   (cdkDropListDropped)="drop($event)" class="col-lg-3 col-md-12 mb-4 order-3">
