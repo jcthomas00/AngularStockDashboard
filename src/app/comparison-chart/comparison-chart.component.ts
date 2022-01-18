@@ -31,19 +31,23 @@ export class ComparisonChartComponent implements OnInit {
   ngOnInit(): void {
     //this.comparisonStocks.push(this.initialStock)
     console.log('check here', this.comparisonStocks);
-    this.stockService.getStockList().subscribe(list => {this.symbols = list.symbols;});
+    this.stockService.getStockList().subscribe(list => {
+      this.symbols = list.symbols;
+      console.log('stock list', this.symbols)
+    });
+    //console.log('stock list', this.symbols)
     this.dataService.getcomparisonSymbols().subscribe(symbols => {
-      this.stocksToCompare = []; 
-      symbols.forEach(sym => {
-        this.retrieveStockData(sym)
-        const stockToPush = this.stocks.filter((stock) => stock.symbol===sym)[0];
-        console.log(this.stocks)
-        console.log(stockToPush)
-        stockToPush.close.forEach((closingVal, index) => {
-          stockToPush.close[index] = closingVal//(closingVal-stockToPush.close[stockToPush.close.length-1])/stockToPush.close[stockToPush.close.length-1]
+        this.stocksToCompare = []; 
+        symbols.forEach(sym => {
+          this.retrieveStockData(sym)
+          const stockToPush = this.stocks.filter((stock) => stock.symbol===sym)[0];
+          console.log(this.stocks)
+          console.log(stockToPush)
+          stockToPush.close.forEach((closingVal, index) => {
+            stockToPush.close[index] = closingVal //(closingVal-stockToPush.close[stockToPush.close.length-10])/stockToPush.close[stockToPush.close.length-10]
+          })
+          this.stocksToCompare.push(stockToPush)
         })
-        this.stocksToCompare.push(stockToPush)
-      })
       
       this.chartData = [];
       this.stocksToCompare.forEach((element,index) => {
