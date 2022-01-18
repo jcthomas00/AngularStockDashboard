@@ -1,8 +1,8 @@
 <!-- <div *ngIf="stocks"> -->
-<div>
+<div *ngIf="chartData">
     <plotly-plot
     [style]="{position: 'relative', width: '100%', height: '100%'}"
-        [data]="data"
+        [data]="chartData"
         [layout]="graph1.layout"
         [useResizeHandler]="true"></plotly-plot>
 </div>

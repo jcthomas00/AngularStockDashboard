@@ -50,7 +50,6 @@ export class StockService {
   getStockLiveData = ():Observable<any> => {
     return new Observable((observer:any) => {
       this.socket.on('live', (data:any) => {
-        // console.log(data)
         observer.next(data);
       })
     })

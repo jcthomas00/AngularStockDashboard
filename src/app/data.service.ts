@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, from } from 'rxjs';
+import { BehaviorSubject, from, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,12 +9,13 @@ export class DataService {
   symbol = new BehaviorSubject('AAPL');
   symbols:string[] = [];
   symbolChange = this.symbol.asObservable();
-  symbolComparison:string[] = []
+  symbolComparison = new BehaviorSubject<string[]>([]);
   date = new BehaviorSubject('2021-10-01');
   dateChange = this.date.asObservable();
   timeframe = new BehaviorSubject(-1)
   timeframeChange = this.timeframe.asObservable();
   stockIndex:string = 'nasdaq'
+  currentStats = new BehaviorSubject({});
 
   constructor() { }
 
@@ -26,6 +27,23 @@ export class DataService {
   getSymbols = () => {
     return from(this.symbols);
   } 
+
+  getCurrentStats = () => {
+    return from(this.currentStats)
+  }
+
+  setcomparisonSymbol (symbol: string) {
+    if(this.symbolComparison.value.indexOf(symbol) < 0){
+      this.symbolComparison.next([symbol].concat(this.symbolComparison.value))
+    }
+  }
+  getcomparisonSymbols = () => {
+    return from(this.symbolComparison)
+  }
+
+  setCurrentStats (currentStats: any) {
+    this.currentStats.next(currentStats)
+  }
 
   changeDate (date: string) {
     this.date.next(date)

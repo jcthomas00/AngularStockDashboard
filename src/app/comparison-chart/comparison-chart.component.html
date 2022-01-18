@@ -1,7 +1,7 @@
-<app-line-chart [comparisonStocks]='comparisonStocks' ></app-line-chart>
+<app-line-chart [chartData]="chartData" ></app-line-chart>
 <div>
     <ul>
-        <li *ngFor='let stock of comparisonStocks; let i = index'>
+        <li *ngFor='let stock of stocksToCompare; let i = index'>
             <span >{{ stock.symbol }} {{ stock.close[stock.close.length-1] }}</span>
             <span (click) = "deleteStock(i)">X</span>
         </li>

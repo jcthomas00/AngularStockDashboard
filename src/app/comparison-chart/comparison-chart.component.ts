@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Stocks } from 'src/Interfaces';
+import { LineChart, Stocks } from 'src/Interfaces';
 import { DataService } from '../data.service';
 import { StockService } from '../stock.service';
 
@@ -18,17 +18,52 @@ export class ComparisonChartComponent implements OnInit {
   @Input() initialStock = <Stocks>{};
   @Input() comparisonStocks:Stocks[] = []
   @Input () stocks:Stocks[] = [];
+
   query:string = ''
-  symbols:string[] = ['AAPL', 'TSLA', 'BAC'];
+  symbols:string[] = [];
   timeframe:number = -1
   startDate:string = '2021-01-01'
+  stocksToCompare:Stocks[] = [];
+  symbolsToCompare:string[] = [];
+  chartData:LineChart[] = [];
+  color:string[] = []
 
   ngOnInit(): void {
     //this.comparisonStocks.push(this.initialStock)
-    console.log('check here', this.comparisonStocks)
+    console.log('check here', this.comparisonStocks);
+    this.stockService.getStockList().subscribe(list => {this.symbols = list.symbols;});
+    this.dataService.getcomparisonSymbols().subscribe(symbols => {
+      this.stocksToCompare = [];
+      symbols.forEach(sym => {
+        this.retrieveStockData(sym)
+        const stockToPush = this.stocks.filter((stock) => stock.symbol===sym)[0];
+        stockToPush.close.forEach((closingVal, index) => {
+          stockToPush.close[index] = closingVal//(closingVal-stockToPush.close[stockToPush.close.length-1])/stockToPush.close[stockToPush.close.length-1]
+        })
+        this.stocksToCompare.push(stockToPush)
+      })
+      
+      this.chartData = [];
+      this.stocksToCompare.forEach((element,index) => {
+        this.chartData.push({
+          x:  element.x,
+          y:  element.close,
+          name: element.symbol,
+          decreasing: {line: {color: '#7F7F7F'}}, 
+          increasing: {line: {color: '#17BECF'}}, 
+          line: {line_shape: 'spline'}, 
+          type: 'scatter', 
+          xaxis: 'x', 
+          yaxis: 'y' ,
+          mode: 'lines+markers',
+          connectgaps: true
+        });
+      })
+    })
   }
 
   onSelectStock = (newSymbol:string) => {
+    this.dataService.setcomparisonSymbol(newSymbol)
     this.query = ''
     if (this.dataService.symbol.value !== newSymbol) {
      // this.stockService.requestHistoricalData([this.dataService.symbol.value], this.dataService.timeframe.value, this.dataService.date.value)
@@ -38,44 +73,6 @@ export class ComparisonChartComponent implements OnInit {
 
   retrieveStockData = (newSymbol:string) =>{
     this.stockService.requestHistoricalData([newSymbol], this.dataService.timeframe.value, this.dataService.date.value)
-    this.stockService.getStockHistoricalData().subscribe((response)=>{
-     this.stocks = this.stocks.filter(stock => stock.symbol !== newSymbol);
-
-      response.data[0].data.sort((a:any,b:any) => {
-        if(new Date(a.timestamp) > new Date(b.timestamp)){return 1}
-        else if(new Date(a.timestamp) < new Date(b.timestamp)){return -1}
-        else return 0;
-      });
-
-      console.log('response data', response.data)
-
-      if(newSymbol === response.data[0].symbol){
-        this.comparisonStocks.push({
-          symbol: newSymbol,
-          x:      this.unpackArray(response.data[0].data, "timestamp"),
-          close:  this.convertUnpackedArray(response.data[0].data, "close"),
-          high:   this.unpackArray(response.data[0].data, "high"),
-          low:    this.unpackArray(response.data[0].data, "low"),
-          open:   this.unpackArray(response.data[0].data, "open"),
-          decreasing: {line: {color: '#7F7F7F'}}, 
-          increasing: {line: {color: '#17BECF'}}, 
-          line: {color: 'rgba(31,119,180,1)'}, 
-          type: 'candlestick', 
-          xaxis: 'x', 
-          yaxis: 'y' 
-        })
-      }
-  })
-  console.log('comparison', this.comparisonStocks)
-}
-
-  unpackArray = (array:any[], key:string) => {
-    return array.map(array => array[key]);
-  }
-
-  convertUnpackedArray = (array:any[], key:string) => {
-    let initial = array[0][key]
-    return array.map(array => (array[key]-initial)/initial);
   }
 
   deleteStock(index:number): void {

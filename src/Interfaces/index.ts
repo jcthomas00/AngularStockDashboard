@@ -23,7 +23,8 @@ export interface LineChart {
     xaxis: string, 
     yaxis: string,
     mode: string,
-    connectgaps: boolean
+    connectgaps: boolean,
+    name: string
 }; 
 
 export interface UserData {
