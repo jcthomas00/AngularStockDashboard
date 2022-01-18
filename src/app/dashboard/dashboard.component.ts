@@ -128,8 +128,15 @@ export class DashboardComponent implements OnInit {
           this.stockToDisplay = newlyReceivedStock
         }
         //push the data into out stocks array
-        if(this.stocks.filter((stock:Stocks)=> newlyReceivedStock.symbol === stock.symbol).length < 1)
-          this.stocks.push(newlyReceivedStock)
+        let doesStockExist = this.stocks.filter((stock:Stocks) => newlyReceivedStock.symbol === stock.symbol)
+        console.log(doesStockExist)
+        if (doesStockExist.length === 0) {
+         // this.stocks.push(newlyReceivedStock)
+         this.stocks = [...this.stocks, newlyReceivedStock]
+        }
+        // ) {
+        //   
+        // }
       });
       
   })
@@ -187,6 +194,7 @@ export class DashboardComponent implements OnInit {
       this.dataService.changeSymbol(newSymbol)
       this.stockService.requestHistoricalData([this.dataService.symbol.value], this.dataService.timeframe.value, this.dataService.date.value)
       console.log('onSymbolChange', this.dataService.symbol.value, this.dataService.timeframe.value, this.dataService.date.value)
+      console.log('dashboard stocks', this.stocks)
     }
   }
 
