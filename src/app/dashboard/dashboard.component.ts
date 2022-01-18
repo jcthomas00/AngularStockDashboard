@@ -1,11 +1,11 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { DataService } from '../data.service';
 import { StockService } from '../stock.service';
 import { UserService } from '../user.service';
 import { AuthService } from '../auth.service';
-import { Subject, BehaviorSubject, Observable, of } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { Stocks } from 'src/Interfaces';
 
 @Component({
@@ -27,12 +27,12 @@ export class DashboardComponent implements OnInit {
     }
 
   query:string = ''
-  symbols:string[] = ['AAPL'];
+  symbols:string[] = [];
   timeframe:number = -1
   startDate:string = '2021-10-01'
   leftBar = [4,1];
   rightBar = [2,3];
-  favorites:string[] = [];  
+  favorites:string[] = ['BAC', 'TSLA'];  
   stocks:Stocks[] = [];  //symbol + data of all searches
   comparisonStocks:string[] = []  // array for comparison
   stockToDisplay = <Stocks>{};
@@ -66,48 +66,56 @@ export class DashboardComponent implements OnInit {
       this.stockService.requestLiveData(this.dataService.symbol.value);
     });
     this.retrieveStockData();
+
+    this.stockService.requestHistoricalData(this.favorites, this.dataService.timeframe.value, this.dataService.date.value);
+    this.favorites.map(fav => {
+      this.stockService.requestLiveData(fav);
+    })
+  }
+
+  getFavStocks = () => {
+    const favs = this.stocks.filter(stock => this.favorites.includes(stock.symbol));
+    //console.log("favs", this.favorites, this.stocks)
+    // favs.forEach((fav) => {
+    //   fav.x = fav.x.slice(fav.x.length-11, 10);
+    //   fav.close = fav.close.slice(fav.close.length-11, 10);
+    // })
+    return favs;
   }
 
   retrieveStockData = () =>{
     this.stockService.getStockHistoricalData().subscribe((response)=>{
       this.stocks = this.stocks.filter(stock => stock.symbol !== this.dataService.symbol.value);
 
-      response.data[0].data.sort((a:any,b:any) => {
-        if(new Date(a.timestamp) > new Date(b.timestamp)){return 1}
-        else if(new Date(a.timestamp) < new Date(b.timestamp)){return -1}
-        else return 0;
-      });
-      if(this.dataService.symbol.value === response.data[0].symbol){
-        this.stockToDisplay = {
-          symbol: this.dataService.symbol.value,
-          x:      this.unpackArray(response.data[0].data, "timestamp"),
-          close:  this.unpackArray(response.data[0].data, "close"),
-          high:   this.unpackArray(response.data[0].data, "high"),
-          low:    this.unpackArray(response.data[0].data, "low"),
-          open:   this.unpackArray(response.data[0].data, "open"),
-          decreasing: {line: {color: '#7F7F7F'}}, 
-          increasing: {line: {color: '#17BECF'}}, 
+      response.data.forEach((company:any) => {
+        //sort each dataset
+        company.data.sort((a:any,b:any) => {
+          if(new Date(a.timestamp) > new Date(b.timestamp)){return 1}
+          else if(new Date(a.timestamp) < new Date(b.timestamp)){return -1}
+          else return 0;
+        });
+
+        const newlyReceivedStock = {
+          symbol: company.symbol,
+          x:      this.unpackArray(company.data, "timestamp"),
+          close:  this.unpackArray(company.data, "close"),
+          high:   this.unpackArray(company.data, "high"),
+          low:    this.unpackArray(company.data, "low"),
+          open:   this.unpackArray(company.data, "open"),
+          decreasing: {line: {color: '#aaa'}}, 
+          increasing: {line: {color: 'orange'}}, 
           line: {color: 'rgba(31,119,180,1)'}, 
           type: 'candlestick', 
           xaxis: 'x', 
           yaxis: 'y' 
         }
-      }
-
-      this.stocks.push({
-        symbol: this.dataService.symbol.value,
-        x:      this.unpackArray(response.data[0].data, "timestamp"),
-        close:  this.unpackArray(response.data[0].data, "close"),
-        high:   this.unpackArray(response.data[0].data, "high"),
-        low:    this.unpackArray(response.data[0].data, "low"),
-        open:   this.unpackArray(response.data[0].data, "open"),
-        decreasing: {line: {color: '#7F7F7F'}}, 
-        increasing: {line: {color: '#17BECF'}}, 
-        line: {color: 'rgba(31,119,180,1)'}, 
-        type: 'candlestick', 
-        xaxis: 'x', 
-        yaxis: 'y' 
-    })
+        //set in stockToShow if this is selected stock
+        if(this.dataService.symbol.value === company.symbol){
+          this.stockToDisplay = newlyReceivedStock
+        }
+        //push the data into out stocks array
+        this.stocks.push(newlyReceivedStock)
+      });
   })
 
     //update candlestick chart data
@@ -119,8 +127,10 @@ export class DashboardComponent implements OnInit {
         let lastIndex:number;
 
         historical = this.stocks.filter(stock => stock.symbol === liveSymbol)[0];
-        lastIndex = historical.x.length;
-        this.setStockValue(historical,lastIndex,newVals);
+        if(historical){
+          lastIndex = historical.x.length;
+          this.setStockValue(historical,lastIndex,newVals);
+        }
 
         if(liveSymbol === this.dataService.symbol.value){
           this.dataService.setCurrentStats(newVals);
@@ -132,12 +142,10 @@ export class DashboardComponent implements OnInit {
     //push new data to candlestick chart
     this.dynamicStocks$.subscribe(res=>{
       this.stockToDisplay = this.stockToDisplay;
-      console.log(this.stockToDisplay)
     })
   }//end of retrieveStockData()
 
   setStockValue = (stock:Stocks, index:number, newVals:any) => {
-    console.log("setting");
     stock.x[index]=newVals["timestamp"];
     stock.close[index]=newVals["close"];
     stock.high[index]=newVals["high"];

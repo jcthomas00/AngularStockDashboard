@@ -86,9 +86,13 @@
       Stock Detail
     </div>
       <div class="card-body">
+          <div *ngFor="let fav of getFavStocks()">
+            <app-favorites [stock]="fav"></app-favorites>
+          </div>
+
         <div *ngFor="let stock of stocks">
           {{stock.symbol}}: {{stock.close[stock.close.length-1]}}
-        <app-comparison-chart></app-comparison-chart>
+        <app-line-chart [stockClose]="stock.close" [times]="stock.x" ></app-line-chart>
 
         </div>
         
