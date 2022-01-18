@@ -58,9 +58,7 @@ export class DashboardComponent implements OnInit {
         this.userService.getUserData(user.uid).subscribe(userInfo=>{
           this.leftBar = userInfo.leftBar; 
           this.rightBar = userInfo.rightBar;
-          userInfo.favorites.forEach((element:string) => {
-            this.dataService.setFavoritesSymbol(element);
-          });
+          this.dataService.setFavoritesSymbol(userInfo.favorites);
         })
       }
     });

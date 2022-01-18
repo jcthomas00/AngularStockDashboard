@@ -44,10 +44,8 @@ export class DataService {
     return from(this.symbolComparison)
   }
 
-  setFavoritesSymbol (symbol: string) {
-    if(this.symbolFavorites.value.indexOf(symbol) < 0){
-      this.symbolFavorites.next([symbol].concat(this.symbolFavorites.value))
-    }
+  setFavoritesSymbol (symbols: string[]) {
+      this.symbolFavorites.next(symbols)
   }
   getFavoritesSymbols = () => {
     console.log('Favorites symbol', this.symbolFavorites.value)

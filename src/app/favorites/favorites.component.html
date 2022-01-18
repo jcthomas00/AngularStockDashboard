@@ -1,2 +1,19 @@
-<!-- <app-line-chart [stockClose]="stock.close" [times]="stock.x" ></app-line-chart> -->
-<p>{{stock.symbol}}</p>
+<div *ngFor="let stock of favorites" (click)="onSelectStock(stock); inputSearch.value=''">
+    <img src="../../assets/company-logo/{{stock}}.svg" alt="">{{stock}}
+</div>
+
+
+<div class="compare-search">
+    <mat-form-field class="no-bottom" >
+        <mat-label>Stock Search</mat-label>
+        <input #inputSearch matInput type="text" placeholder="Add Stock" [(ngModel)]="query">
+      </mat-form-field>
+      <div *ngIf='query' class='search-result drop-doown'>
+        <table>
+          <tr class="item" *ngFor='let symbol of symbols | searchFilter: query' (click)="onSelectStock(symbol); inputSearch.value=''">
+            <td>{{ symbol }}</td>
+          </tr>
+        </table>
+      </div>
+
+  </div>

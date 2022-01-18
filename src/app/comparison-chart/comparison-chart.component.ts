@@ -29,43 +29,44 @@ export class ComparisonChartComponent implements OnInit {
   color:string[] = []
 
   ngOnInit(): void {
-    //this.comparisonStocks.push(this.initialStock)
-    console.log('check here', this.comparisonStocks);
     this.stockService.getStockList().subscribe(list => {
       this.symbols = list.symbols;
-      console.log('stock list', this.symbols)
     });
-    //console.log('stock list', this.symbols)
     this.dataService.getcomparisonSymbols().subscribe(symbols => {
-        this.stocksToCompare = []; 
-        symbols.forEach(sym => {
-          this.retrieveStockData(sym)
+      this.stocksToCompare = []; 
+      symbols.forEach(sym => {
+      //  this.retrieveStockData(sym)
+        console.log(this.stocks)
+        setTimeout(() => {
           const stockToPush = this.stocks.filter((stock) => stock.symbol===sym)[0];
-          console.log(this.stocks)
+          console.log('flag', this.stocks.filter((stock) => stock.symbol===sym))
+          console.log('sym', sym)
           console.log(stockToPush)
           stockToPush.close.forEach((closingVal, index) => {
-            stockToPush.close[index] = closingVal //(closingVal-stockToPush.close[stockToPush.close.length-10])/stockToPush.close[stockToPush.close.length-10]
+            stockToPush.close[index] = (closingVal)//-stockToPush.close[0])/stockToPush.close[0]
+            console.log(stockToPush.close[0])
           })
           this.stocksToCompare.push(stockToPush)
-        })
-      
-      this.chartData = [];
-      this.stocksToCompare.forEach((element,index) => {
-        this.chartData.push({
-          x:  element.x,
-          y:  element.close,
-          name: element.symbol,
-          decreasing: {line: {color: '#7F7F7F'}}, 
-          increasing: {line: {color: '#17BECF'}}, 
-          line: {line_shape: 'spline'}, 
-          type: 'scatter', 
-          xaxis: 'x', 
-          yaxis: 'y' ,
-          mode: 'lines+markers',
-          connectgaps: true
-        });
+
+          this.chartData = [];
+          this.stocksToCompare.forEach((element,index) => {
+            this.chartData.push({
+              x:  element.x,
+              y:  element.close,
+              name: element.symbol,
+              decreasing: {line: {color: '#7F7F7F'}}, 
+              increasing: {line: {color: '#17BECF'}}, 
+              line: {line_shape: 'spline'}, 
+              type: 'scatter', 
+              xaxis: 'x', 
+              yaxis: 'y' ,
+              mode: 'lines',
+              connectgaps: true
+            });
+          })
+        },100)
       })
-    })
+  })
   }
 
   onSelectStock = (newSymbol:string) => {
