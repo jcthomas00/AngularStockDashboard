@@ -11,7 +11,7 @@ export class DataService {
   symbolChange = this.symbol.asObservable();
   symbolComparison = new BehaviorSubject<string[]>([]);
   symbolFavorites = new BehaviorSubject<string[]>([]);
-  date = new BehaviorSubject('2021-10-01');
+  date = new BehaviorSubject('2021-01-01');
   dateChange = this.date.asObservable();
   timeframe = new BehaviorSubject(-1)
   timeframeChange = this.timeframe.asObservable();

@@ -23,13 +23,13 @@ export class DashboardComponent implements OnInit {
     ) {
       this.stockService.requestHistoricalData([this.dataService.symbol.value], this.dataService.timeframe.value, this.dataService.date.value);
       this.stockService.requestStockList();
-      this.stockService.getStockList().subscribe(list => {this.symbols = list.symbols;});
+      this.stockService.getStockList().subscribe(list => {console.log(list); this.symbols = list.symbols;});
     }
 
   query:string = ''
   symbols:string[] = [];
   timeframe:number = -1
-  startDate:string = '2021-10-01'
+  startDate:string = '2021-01-01'
   leftBar = [4,1];
   rightBar = [2,3];
   favorites:string[] = ['BAC', 'TSLA'];  

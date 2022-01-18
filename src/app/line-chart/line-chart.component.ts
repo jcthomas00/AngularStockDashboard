@@ -98,7 +98,7 @@ export class LineChartComponent implements OnInit {
         showticklabels: false,
         domain: [0, 1], 
         color: 'pink',
-        range: ['2022-01-01', '2022-01-17'],
+        range: ['2021-01-01', '2022-01-17'],
         type: 'date'
       }}
   };
