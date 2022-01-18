@@ -85,7 +85,6 @@ export class DashboardComponent implements OnInit {
 
   retrieveStockData = () =>{
     this.stockService.getStockHistoricalData().subscribe((response)=>{
-      this.stocks = this.stocks.filter(stock => stock.symbol !== this.dataService.symbol.value);
 
       response.data.forEach((company:any) => {
         //sort each dataset
@@ -116,12 +115,14 @@ export class DashboardComponent implements OnInit {
         //push the data into out stocks array
         this.stocks.push(newlyReceivedStock)
       });
+      
   })
 
     //update candlestick chart data
     let historical:Stocks;
     this.dynamicStocks$ =  this.stockService.getStockLiveData().pipe(
       tap((response)=>{
+        console.log(response)
         const newVals = response["new-value"].data[0],
               liveSymbol = response["new-value"].symbol;
         let lastIndex:number;
@@ -141,6 +142,7 @@ export class DashboardComponent implements OnInit {
 
     //push new data to candlestick chart
     this.dynamicStocks$.subscribe(res=>{
+      //console.log(this.stockToDisplay)
       this.stockToDisplay = this.stockToDisplay;
     })
   }//end of retrieveStockData()
