@@ -15,16 +15,13 @@ export class ComparisonChartComponent implements OnInit {
     private stockService:StockService
   ) { }
 
-  @Input() initialStock = <Stocks>{};
   @Input() comparisonStocks:Stocks[] = []
   @Input () stocks:Stocks[] = [];
 
   query:string = ''
   symbols:string[] = [];
-  timeframe:number = -1
-  startDate:string = '2021-01-01'
+  
   stocksToCompare:Stocks[] = [];
-  symbolsToCompare:string[] = [];
   chartData:LineChart[] = [];
   color:string[] = []
 
@@ -35,17 +32,11 @@ export class ComparisonChartComponent implements OnInit {
     this.dataService.getcomparisonSymbols().subscribe(symbols => {
       this.stocksToCompare = []; 
       symbols.forEach(sym => {
-      //  this.retrieveStockData(sym)
-        console.log(this.stocks)
         setTimeout(() => {
           const stockToPush = this.stocks.filter((stock) => stock.symbol===sym)[0];
-          console.log('flag', this.stocks.filter((stock) => stock.symbol===sym))
-          console.log('sym', sym)
-          console.log(stockToPush)
           let initialValue = stockToPush.close[0]
           stockToPush.close.forEach((closingVal, index) => {
             stockToPush.close[index] = closingVal//(closingVal-initialValue)/initialValue
-            console.log(stockToPush.close[0])
           })
           this.stocksToCompare.push(stockToPush)
 
@@ -65,7 +56,7 @@ export class ComparisonChartComponent implements OnInit {
               connectgaps: true
             });
           })
-        },1500)
+        },500)
       })
   })
   }
@@ -74,7 +65,6 @@ export class ComparisonChartComponent implements OnInit {
     this.dataService.setcomparisonSymbol(newSymbol)
     this.query = ''
     if (this.dataService.symbol.value !== newSymbol) {
-     // this.stockService.requestHistoricalData([this.dataService.symbol.value], this.dataService.timeframe.value, this.dataService.date.value)
       this.retrieveStockData(newSymbol)
     }
   }
@@ -86,7 +76,6 @@ export class ComparisonChartComponent implements OnInit {
   deleteStock(index:number): void {
     console.log('symbol comparison array', this.dataService.symbolComparison.value)
     this.dataService.deletecomparisonSymbol(this.stocksToCompare[index].symbol)
-    //this.stocksToCompare.splice(index, 1)
     this.chartData.splice(index, 1)
   }
 }

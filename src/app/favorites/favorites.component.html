@@ -2,33 +2,35 @@
     <div class="card-header">
       Favorites
     </div>
+
+    <!-- Show current favorites -->
       <div class="card-body">
         <ul *ngIf="favorites.length > 0">
             <li *ngFor="let stock of favorites; let i = index" (click)="onSelectStock(stock); inputSearch.value=''">
                     <img src="../../assets/company-logo/{{stock}}.svg" alt="{{stock}}">
                     <span class="badge rounded-pill  bg-dark " (click) = "deleteStock(i)">
                         <i class="fas fa-times"></i>
-                    </span>
-                    <!-- <span class="closebtn" (click) = "deleteStock(i)" >&times;</span> -->
-                
+                    </span>                
             </li>
         </ul>
       </div>
-      <div class="card-footer">
-            <!-- search -->
-            <div class="compare-search">
-                <mat-form-field class="no-bottom" >
-                    <mat-label>Stock Search</mat-label>
-                    <input #inputSearch matInput type="text" placeholder="Add Stock" [(ngModel)]="query">
-                </mat-form-field>
-                <div *ngIf='query' class='search-result drop-doown'>
-                    <table>
-                        <tr class="item" *ngFor='let symbol of symbols | searchFilter: query' (click)="onSelectStock(symbol); inputSearch.value=''">
-                        <td>{{ symbol }}</td>
-                        </tr>
-                    </table>
-                </div>
+
+    <!-- Search section -->
+    <div class="card-footer">
+        <div class="compare-search">
+            <mat-form-field class="no-bottom" >
+                <mat-label>Stock Search</mat-label>
+                <input #inputSearch matInput type="text" placeholder="Add Stock" [(ngModel)]="query">
+            </mat-form-field>
+            <div *ngIf='query' class='search-result drop-doown'>
+                <table>
+                    <tr class="item" *ngFor='let symbol of symbols | searchFilter: query' (click)="onSelectStock(symbol); inputSearch.value=''">
+                    <td>{{ symbol }}</td>
+                    </tr>
+                </table>
             </div>
-      </div>
+        </div>
+    </div>
+
   </div>
   

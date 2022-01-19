@@ -14,6 +14,8 @@ export class CurrentInfoComponent implements OnInit {
   up:number = 0;
 
   ngOnInit(): void {
+
+    // get and display new stats when a change occurs in the data service
     this.dataService.getCurrentStats().subscribe((data:any)=>{
       this.currentInfo = data;
       if(data.close){

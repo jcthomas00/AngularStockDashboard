@@ -461,3 +461,15 @@ width: 100%;
   row-gap: 20px;
   flex-wrap: wrap;
 }
+
+footer {
+  font-size: 15px;
+  padding: 10px;
+  text-align: center;
+  border-top: 1px solid $blue; 
+  color: $blue;
+  letter-spacing: 2px;
+}
+footer a{
+  color: $orange;
+}

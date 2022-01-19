@@ -1,108 +1,116 @@
+
+<!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-transparent  bg-primary  navbar-absolute">
   <div class="container">
+
+      <!-- Stock title -->
       <a class="navbar-brand" href="home">
         STOCK: {{dataService.symbol.value}}
       </a>
+
+      <!-- Responsive menu buttom -->
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <i class="fa fa-bars" aria-hidden="true"></i>
       </button>
+
       <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
+          <ul class="navbar-nav ml-auto">
 
-          <mat-form-field class="no-bottom example-full-width" >
-            <mat-label>Stock Search</mat-label>
-            <input #inputSearch matInput type="text" placeholder="Stock Search" [(ngModel)]="query">
-          </mat-form-field>
-          
-          <div *ngIf='query' class='search-result drop-doown'>
-          <table>
-            <tr class="item" *ngFor='let symbol of symbols | searchFilter: query' (click)="onSelectStock(symbol); inputSearch.value=''">
-              <td>{{ symbol }}</td>
-            </tr>
-          </table>
-          </div>
-        </li>
-        <li class="nav-item">
-          
-<mat-form-field class="no-bottom" name="dateForm" ngDefaultControl required>
-  <mat-label>Choose a date</mat-label>
-  <input matInput [matDatepicker]="picker" [(ngModel)]="startDate" (dateChange)="onDateChange()">
-  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-  <mat-datepicker #picker></mat-datepicker>
-  </mat-form-field>
-
-        </li>
-        <li class="nav-item">
-          <mat-button-toggle-group name="fontStyle" aria-label="Font Style" [(ngModel)]="timeframe" (change)="onTimeframeChange()">
-            <mat-button-toggle value="5">5m</mat-button-toggle>
-            <mat-button-toggle value="15">15m</mat-button-toggle>
-            <mat-button-toggle value="60">1h</mat-button-toggle>
-            <mat-button-toggle value="-1">1d</mat-button-toggle>
-            </mat-button-toggle-group>   
-          
-        </li>
-
-        
-        <li class="nav-item dropdown" *ngIf="getUser() | async as user; else showLogin">
-          <a class="nav-link usr-icon dropdown-toggle" href="#" data-bs-toggle="dropdown">
-            <img class="usr-img" src="{{ user.photoURL }}" alt="{{ user.displayName }}">    
-          </a>         
-          <ul class="dropdown-menu">
-            <li>
-              <button class="dropdown-item" (click)="logout()">Logout</button>
+            <!-- Stock search -->
+            <li class="nav-item">
+              <mat-form-field class="no-bottom example-full-width" >
+                <mat-label>Stock Search</mat-label>
+                <input #inputSearch matInput type="text" placeholder="Stock Search" [(ngModel)]="query">
+              </mat-form-field>
+              <div *ngIf='query' class='search-result drop-doown'>
+              <table>
+                <tr class="item" *ngFor='let symbol of symbols | searchFilter: query' (click)="onSelectStock(symbol); inputSearch.value=''">
+                  <td>{{ symbol }}</td>
+                </tr>
+              </table>
+              </div>
             </li>
+
+            <!-- Datepicker -->
+            <li class="nav-item">   
+              <mat-form-field class="no-bottom" name="dateForm" ngDefaultControl required>
+                <mat-label>Choose a date</mat-label>
+                <input matInput [matDatepicker]="picker" [(ngModel)]="startDate" (dateChange)="onDateChange()" [min]="minDate" [max]="maxDate" disabled>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker  disabled="false"></mat-datepicker>
+              </mat-form-field>
+            </li>
+
+            <!-- Timebreak selection -->
+            <li class="nav-item">
+              <mat-button-toggle-group name="fontStyle" aria-label="Font Style" [(ngModel)]="timeframe" (change)="onTimeframeChange()">
+                <mat-button-toggle value="5">5m</mat-button-toggle>
+                <mat-button-toggle value="15">15m</mat-button-toggle>
+                <mat-button-toggle value="60">1h</mat-button-toggle>
+                <mat-button-toggle value="-1">1d</mat-button-toggle>
+              </mat-button-toggle-group>   
+            </li>
+            
+          <!-- Login -->
+            <li class="nav-item dropdown" *ngIf="getUser() | async as user; else showLogin">
+              <a class="nav-link usr-icon dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                <img class="usr-img" src="{{ user.photoURL }}" alt="{{ user.displayName }}">    
+              </a>         
+              <ul class="dropdown-menu">
+                <li>
+                  <button class="dropdown-item" (click)="logout()">Logout</button>
+                </li>
+              </ul>
+            </li>
+            <ng-template #showLogin>
+              <li class="nav-item">
+                <button class="nav-link scrollTo" (click)="login()">Login/Register with Google</button>
+              </li>
+            </ng-template>
+
           </ul>
-        </li>
-        <ng-template #showLogin>
-          <li class="nav-item">
-            <button class="nav-link scrollTo" (click)="login()">Login/Register with Google</button>
-          </li>
-        </ng-template>
-      </ul>
       </div>
   </div>
 </nav>
 <!--header-->
+
+
+<!-- MainChart -->
 <div class="panel-header panel-header-lg">
-
-<app-chart [stockToDisplay]="stockToDisplay"></app-chart>
+  <app-chart [stockToDisplay]="stockToDisplay"></app-chart>
 </div>
+
+<!-- Bottom Section -->
 <div class="content container">
-<div class="row">
-  <div cdkDropList #leftSide="cdkDropList"  [cdkDropListData]="leftBar" [cdkDropListConnectedTo]="rightSide"
-       (cdkDropListDropped)="drop($event)" class="col-lg-3 col-md-12 mb-4 order-2 order-lg-1 order-xl-1">
-      <div *ngFor="let item of leftBar" class="card">
-        <app-news *ngIf="item===1"></app-news>
-        <app-company-info *ngIf="item===2"></app-company-info>
-        <app-map *ngIf="item===3"></app-map>
-        <app-current-info *ngIf="item===4"></app-current-info>
-      </div>
-  </div>
+  <div class="row">
 
-  <div class="col-lg-6 col-md-12 mb-4 order-1 order-lg-2 order-xl-2">
-        <app-comparison-chart [comparisonStocks]="comparisonStocks" [stocks]="stocks"></app-comparison-chart> 
-
-        <app-favorites></app-favorites>
-        <!-- <div class="card mt-3">
-          <div class="card-body">
-            <div class="d-flex justify-content-between px-md-1">
-              
-                <app-favorites *ngFor="let fav of getFavStocks()" [stock]="fav"></app-favorites>
-            </div>
+     <!-- Left Row-->
+      <div cdkDropList #leftSide="cdkDropList"  [cdkDropListData]="leftBar" [cdkDropListConnectedTo]="rightSide"
+          (cdkDropListDropped)="drop($event)" class="col-lg-3 col-md-12 mb-4 order-2 order-lg-1 order-xl-1">
+          <div *ngFor="let item of leftBar" class="card">
+            <app-news *ngIf="item===1"></app-news>
+            <app-company-info *ngIf="item===2"></app-company-info>
+            <app-map *ngIf="item===3"></app-map>
+            <app-current-info *ngIf="item===4"></app-current-info>
           </div>
-        </div> -->
+      </div>
 
+      <!-- Middle Row-->
+      <div class="col-lg-6 col-md-12 mb-4 order-1 order-lg-2 order-xl-2">
+            <app-favorites></app-favorites>
+            <app-comparison-chart [comparisonStocks]="comparisonStocks" [stocks]="stocks"></app-comparison-chart> 
+      </div>
+
+      <!-- Right Row-->
+      <div cdkDropList #rightSide="cdkDropList"  [cdkDropListData]="rightBar" [cdkDropListConnectedTo]="leftSide"
+      (cdkDropListDropped)="drop($event)" class="col-lg-3 col-md-12 mb-4 order-3">
+        <div *ngFor="let item of rightBar" class="card">
+          <app-news *ngIf="item===1"></app-news>
+          <app-company-info *ngIf="item===2"></app-company-info>
+          <app-map *ngIf="item===3"></app-map>
+          <app-current-info *ngIf="item===4"></app-current-info>
+        </div>
+      </div>
+  
     </div>
-
-  <div cdkDropList #rightSide="cdkDropList"  [cdkDropListData]="rightBar" [cdkDropListConnectedTo]="leftSide"
-  (cdkDropListDropped)="drop($event)" class="col-lg-3 col-md-12 mb-4 order-3">
-  <div *ngFor="let item of rightBar" class="card">
-    <app-news *ngIf="item===1"></app-news>
-    <app-company-info *ngIf="item===2"></app-company-info>
-    <app-map *ngIf="item===3"></app-map>
-    <app-current-info *ngIf="item===4"></app-current-info>
-  </div>
-</div>
-</div>
 </div>

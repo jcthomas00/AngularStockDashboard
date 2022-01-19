@@ -14,6 +14,7 @@ export class CompanyInfoComponent implements OnInit {
 
   ngOnInit(): void {
     
+    // get new company info and display in widget
     this.dataService.symbol.subscribe(symbol => {
       if(symbol !== ''){
         this.companyInfoService.getCompanyInfo(symbol).subscribe((info) => {
@@ -21,6 +22,6 @@ export class CompanyInfoComponent implements OnInit {
         });
       }
     })
-  }
 
+  }
 }

@@ -1,33 +1,36 @@
 <div class="card comparisons">
   <div class="card-header">
-    Stock Detail
+    Research Area
   </div>
+
+    <!-- Comparison chart -->
     <div class="card-body">
       <app-line-chart [chartData]="chartData" ></app-line-chart>
     </div>
-    <div class="card-footer">
-          <ul>
-              <li *ngFor='let stock of stocksToCompare; let i = index'>
-                <div class="chip">
-                  {{ stock.symbol }}
-                  <span class="closebtn" (click) = "deleteStock(i)" >&times;</span>
-                </div>
-              </li>
-          </ul>
-          
-          <div class="compare-search">
-            <mat-form-field class="no-bottom" >
-                <mat-label>Stock Search</mat-label>
-                <input #inputSearch matInput type="text" placeholder="Add Stock" [(ngModel)]="query">
-              </mat-form-field>
-              <div *ngIf='query' class='search-result drop-doown'>
-                <table>
-                  <tr class="item" *ngFor='let symbol of symbols | searchFilter: query' (click)="onSelectStock(symbol); inputSearch.value=''">
-                    <td>{{ symbol }}</td>
-                  </tr>
-                </table>
-              </div>
 
+    <div class="card-footer">
+      <!-- Show stocks being compared right now -->
+      <ul>
+        <li *ngFor='let stock of stocksToCompare; let i = index'>
+          <div class="chip">
+            {{ stock.symbol }}
+            <span class="closebtn" (click) = "deleteStock(i)" >&times;</span>
           </div>
+        </li>
+      </ul>
+      <!-- Search for stocks to compare -->
+      <div class="compare-search">
+        <mat-form-field class="no-bottom" >
+            <mat-label>Stock Search</mat-label>
+            <input #inputSearch matInput type="text" placeholder="Add Stock" [(ngModel)]="query">
+          </mat-form-field>
+          <div *ngIf='query' class='search-result drop-doown'>
+            <table>
+              <tr class="item" *ngFor='let symbol of symbols | searchFilter: query' (click)="onSelectStock(symbol); inputSearch.value=''">
+                <td>{{ symbol }}</td>
+              </tr>
+            </table>
+          </div>
+      </div>
     </div>
 </div>
