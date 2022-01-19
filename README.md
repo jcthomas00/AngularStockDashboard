@@ -1,6 +1,6 @@
 # AngularStockDashboard
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.14.
+This project creates a stock monitoring dashboard using Angular, Angular Material, SocketIO, MD Bootstrap, and Firebase. You can see the project runnin on firebase hosting here: [stockdashboard-598c0.web.app/](https://stockdashboard-598c0.web.app/)
 
 ## Development server
 

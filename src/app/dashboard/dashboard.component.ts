@@ -124,7 +124,7 @@ export class DashboardComponent implements OnInit {
               low:    this.unpackArray(company.data, "low"),
               open:   this.unpackArray(company.data, "open"),
               decreasing: {line: {color: '#aaa'}}, 
-              increasing: {line: {color: 'orange'}}, 
+              increasing: {line: {color: '#f96332'}}, 
               line: {color: 'rgba(31,119,180,1)'}, 
               type: 'candlestick', 
               xaxis: 'x', 

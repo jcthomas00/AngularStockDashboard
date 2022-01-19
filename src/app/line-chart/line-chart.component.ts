@@ -21,49 +21,8 @@ export class LineChartComponent implements OnInit {
 
    ngOnInit(): void {
     this.stocks = <LineChart>{};
-    //this.updateVals();
   }
 
-  // updateVals = () => {
-  //   this.data = []
-  //   this.comparisonStocks.forEach(element => {
-  //     console.log("x:",  element.close)
-  //     this.stocks = {
-  //       x:  element.x,
-  //       y:  element.close,
-  //       decreasing: {line: {color: '#7F7F7F'}}, 
-  //       increasing: {line: {color: '#17BECF'}}, 
-  //       line: {color: 'orange', line_shape: 'spline'}, 
-  //       type: 'scatter', 
-  //       xaxis: 'x', 
-  //       yaxis: 'y' ,
-  //       mode: 'lines',
-  //       connectgaps: true
-  //     }
-  //     this.data.push(this.stocks)
-  //   })
-  //   this.data[0].x = this.data[0].x.slice();
-  // }
-  // updateVals = () => {
-  //   this.stocks = {
-  //     x:  this.times,
-  //     y:  this.stockClose,
-  //     decreasing: {line: {color: '#7F7F7F'}}, 
-  //     increasing: {line: {color: '#17BECF'}}, 
-  //     line: {color: 'orange', line_shape: 'spline'}, 
-  //     type: 'scatter', 
-  //     xaxis: 'x', 
-  //     yaxis: 'y' ,
-  //     mode: 'lines+markers',
-  //     connectgaps: true
-  //   }
-  //   this.data.push(this.stocks)
-  // }
-
-  ngOnChanges() {
-    console.log("cha-cha", this.chartData)
-   //this.updateVals();
-  }
   title = 'comparison-plots';
   // Bar Chart
   graph1 = {
@@ -73,8 +32,12 @@ export class LineChartComponent implements OnInit {
         y: [''],
     },
     ],
+    config: {
+      displayModeBar: false,
+    },
     layout: {
       useResizeHandler: true,
+      legend: {orientation: 'h'},
       autosize: true,
       margin: {
         l: 30,

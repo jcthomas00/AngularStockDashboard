@@ -46,7 +46,7 @@ export class ChartComponent implements OnInit {
       },
       modebar:{
         bgcolor: "transparent",
-        activecolor: 'orange'
+        activecolor: '#fbe8e1'
       },
       yaxis: {
         autorange: true, 
